@@ -1,10 +1,5 @@
 import { CanvasWidget } from "@projectstorm/react-canvas-core";
-import createEngine, { DiagramModel } from "@projectstorm/react-diagrams";
-import {
-  DefaultLinkModel,
-  DefaultNodeModel,
-  DefaultPortModel,
-} from "@projectstorm/react-diagrams-defaults";
+import createEngine, { DiagramModel, DefaultLinkModel, DefaultNodeModel, DefaultPortModel } from "@projectstorm/react-diagrams";
 import React, { useEffect, useState } from "react";
 
 const Diagram = ({ tables = [], links = [] }) => {
@@ -16,6 +11,7 @@ const Diagram = ({ tables = [], links = [] }) => {
 
     const nodeMap = {};
 
+    // Creazione dei nodi e dei port
     tables.forEach((table) => {
       const node = new DefaultNodeModel({
         name: table.name,
@@ -37,7 +33,6 @@ const Diagram = ({ tables = [], links = [] }) => {
       model.addNode(node);
     });
 
-    // Collegamenti tra le porte
     links.forEach((link) => {
       const sourceNode = nodeMap[link.sourceTable];
       const targetNode = nodeMap[link.targetTable];

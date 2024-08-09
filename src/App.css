@@ -10721,20 +10721,80 @@ label {
 
 .canvas {
   position: relative;
-  width: 70%;
+  width: 100%;
   height: 100vh;
   border: 1px solid black;
 }
 
 .table {
-  background-color: white;
-  border: 1px solid black;
+  border: 1px solid #ccc;
   padding: 10px;
+  background-color: #f9f9f9;
+  position: relative;
+}
+
+.field {
+  padding: 5px;
+  border: 1px solid #ddd;
+  background-color: #eee;
+  cursor: move;
+}
+
+.table .field {
+  margin-bottom: 5px;
+}
+
+.table-diagram {
+  width: 550px;
+  height: 200px;
 }
 
 .diagram-container {
   width: 30%;
   height: 100vh;
+  font-size: 1px !important;
+}
+
+.custom-node {
+  font-size: 1px !important;
+  line-height: 24px;
+  padding: 10px;
+  background-color: red;
+  border-radius: 5px;
+  color: #fff;
+}
+
+.custom-link {
+  stroke: rgb(0, 192, 255);
+  stroke-width: 2px;
+}
+
+.port {
+  font-size: 1px !important;
+}
+
+.css-jpiblr {
+  border: none !important;
+  background-color: none !important;
+  border-radius: 0 !important;
+}
+
+.css-mtwhol {
+  font-size: 1px !important;
+  height: 36px;
+  width: 20px !important;
+  border-bottom: 1px solid red;
+}
+
+.css-11bc0l7 {
+  width: 20px !important;
+}
+
+.css-lldskh {
+  font-size: 1px !important;
+  height: 80px;
+  width: 20px !important;
+  background-color: none !important;
 }
 
 /*# sourceMappingURL=style.css.map */

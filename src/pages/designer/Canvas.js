@@ -1,10 +1,26 @@
-import React from 'react';
-import { useDrop } from 'react-dnd';
-import Table from './Table';
 
-const Canvas = ({ tables, moveTable, addLink }) => {
+
+
+
+
+
+
+  import React, { useRef, useState, useEffect } from "react";
+import { useDrop } from "react-dnd";
+import Table from "./Table";
+import Line from "./Line";
+
+const Canvas = ({ tables, moveTable, addLink, links }) => {
+  const tableRefs = useRef({});
+  const [lineData, setLineData] = useState(links); // Stato per memorizzare i dati delle linee
+
+  const [fieldDrop, setFieldDrop] = useState("");
+  const [tableDrop, setTableDrop] = useState("");
+  const [targetTableDrop, setTargetTableDrop] = useState("");
+  const [targetFieldDrop, setTargetFieldDrop] = useState("");
+
   const [, drop] = useDrop(() => ({
-    accept: 'TABLE',
+    accept: "TABLE",
     drop: (item, monitor) => {
       const delta = monitor.getDifferenceFromInitialOffset();
       const newPos = {
@@ -12,22 +28,91 @@ const Canvas = ({ tables, moveTable, addLink }) => {
         y: item.position.y + delta.y,
       };
       moveTable(item.id, newPos);
+      updateLineData(); 
     },
   }));
 
-  const handleAddLink = (sourceTable, sourceField, targetTable, targetField) => {
+  const updateLineData = () => {
+    const updatedLines = links.map((link) => {
+      const sourceFieldPos = getFieldPosition(`${link.sourceTable}-${link.sourceField}`);
+      const targetFieldPos = getFieldPosition(`${link.targetTable}-${link.targetField}`);
+      return {
+        ...link,
+        sourcePosition: sourceFieldPos,
+        targetPosition: targetFieldPos,
+      };
+    });
+    setLineData(updatedLines);
+  };
+
+  // Funzione per ottenere la posizione di un campo
+  const getFieldPosition = (fieldId) => {
+    const element = document.getElementById(fieldId);
+    if (element) {
+      const rect = element.getBoundingClientRect();
+      const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
+      const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+      return {
+        x: rect.left + scrollX,
+        y: rect.top + scrollY,
+      };
+    }
+    return null;
+  };
+
+  // Aggiorna le linee quando cambiano i link o le tabelle
+  useEffect(() => {
+    updateLineData();
+  }, [tables, links]);
+
+  // Renderizza le linee
+  const renderLines = () => {
+    return lineData.map((link, index) => {
+      const { sourcePosition, targetPosition } = link;
+      if (!sourcePosition || !targetPosition) return null;
+      return (
+        <Line
+          key={index}
+          start={sourcePosition}
+          end={targetPosition}
+          color="black"
+          strokeWidth={2}
+        />
+      );
+    });
+  };
+
+  const handleAddLink = (
+    sourceTable,
+    sourceField,
+    targetTable,
+    targetField
+  ) => {
     addLink(sourceTable, sourceField, targetTable, targetField);
+    updateLineData(); // Aggiorna le linee dopo aver aggiunto un link
   };
 
   return (
     <div ref={drop} className="canvas">
+      {renderLines()}
+
       {tables.map((table) => (
         <Table
+          ref={(el) => (tableRefs.current[table.name] = el)}
           key={table.id}
           {...table}
           tables={tables}
+          links={lineData}
           moveTable={moveTable}
           onAddLink={handleAddLink}
+          fieldDrop={fieldDrop}
+          setFieldDrop={setFieldDrop}
+          tableDrop={tableDrop}
+          setTableDrop={setTableDrop}
+          targetTableDrop={targetTableDrop}
+          setTargetTableDrop={setTargetTableDrop}
+          targetFieldDrop={targetFieldDrop}
+          setTargetFieldDrop={setTargetFieldDrop}
         />
       ))}
     </div>

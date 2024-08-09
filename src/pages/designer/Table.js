@@ -1,5 +1,7 @@
-import React, { useState } from "react";
-import { useDrag } from "react-dnd";
+import React, { useCallback, useEffect, useState } from "react";
+import { useDrag, useDrop } from "react-dnd";
+import Field from "./Field";
+import Line from "./Line";
 
 const Table = ({
   id,
@@ -7,21 +9,48 @@ const Table = ({
   fields,
   position,
   moveTable,
+  links,
   onAddLink,
   tables,
+  fieldDrop,
+  setFieldDrop,
+  tableDrop,
+  setTableDrop,
+  targetTableDrop,
+  setTargetTableDrop,
+  targetFieldDrop,
+  setTargetFieldDrop,
 }) => {
-  const [{ isDragging }, drag] = useDrag(
+
+
+  
+  const [{ isDragging }, drag] = useDrag({
+    type: "TABLE",
+    item: { id, position },
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+    end: (item, monitor) => {
+      if (!monitor.didDrop()) {
+        return;
+      }
+    }
+  });
+
+  console.log(links);
+
+  const [{ isOver }, drop] = useDrop(
     () => ({
-      type: "TABLE",
-      item: { id, position },
+      accept: "FIELD",
+      drop: (item, monitor) => handleFieldDrop(item.field, "drop", monitor),
       collect: (monitor) => ({
-        isDragging: !!monitor.isDragging(),
+        isOver: !!monitor.isOver(),
+        item: monitor.getItem(),
+        dropResult: monitor.getDropResult(),
       }),
     }),
-    [id, position]
+    [name]
   );
-
-  console.log("Tables aa:", tables);
 
   const [selectedField, setSelectedField] = useState("");
   const [targetTable, setTargetTable] = useState("");
@@ -35,67 +64,160 @@ const Table = ({
     opacity: isDragging ? 0.5 : 1,
   };
 
-  const handleAddLink = () => {
-    if (selectedField && targetTable && targetField) {
-      onAddLink(name, selectedField, targetTable, targetField);
+  const handleFieldDrop = useCallback(
+    (field, type, monitor) => {
+      if (type === "drop") {
+        const targetTableObj = tables.find((t) => t.fields.includes(field));
+        if (targetTableObj) {
+          setFieldDrop(field);
+        }
+      } else {
+        if (
+          selectedField &&
+          targetTable &&
+          targetField &&
+          name &&
+          name !== targetTable
+        ) {
+          onAddLink(name, selectedField, targetTable, targetField);
+          setSelectedField("");
+          setTargetTable("");
+          setTargetField("");
+        }
+      }
+    },
+    [
+      tables,
+      setFieldDrop,
+      name,
+      targetFieldDrop,
+      onAddLink,
+      fieldDrop,
+      targetTableDrop,
+      selectedField,
+      targetTable,
+      targetField,
+    ]
+  );
+
+  useEffect(() => {
+    if (
+      targetFieldDrop &&
+      tableDrop &&
+      fieldDrop &&
+      targetTableDrop &&
+      tableDrop !== targetTableDrop
+    ) {
+      onAddLink(tableDrop, fieldDrop, targetTableDrop, targetFieldDrop);
+      setTargetFieldDrop("");
+      setTargetTableDrop("");
+      setFieldDrop("");
+    }
+  }, [fieldDrop, targetTableDrop, targetFieldDrop, tableDrop, onAddLink]);
+
+  const handleMouseEnterField = (field) => {
+    if (field) {
+      setTargetFieldDrop(field);
     }
   };
 
+  const handleMouseEnterTable = (table, type) => {
+    if (type === "target") {
+      setTargetTableDrop(table);
+    } else {
+      setTableDrop(table);
+    }
+  };
+
+  
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
   return (
-    <div ref={drag} style={style} className="table">
-      <h3>{name}</h3>
-      <ul>
-        {fields && fields.length > 0 ? (
-          fields.map((field) => (
-            <li key={field}>
-              {field}
-              <select
-                onChange={(e) => setSelectedField(e.target.value)}
-                value={selectedField}
-              >
-                <option value="">Select Field to Link</option>
-                {fields.map((f) => (
-                  <option key={f} value={f}>
-                    {f}
+    <>
+    
+      <div
+        id={`table-${name}`}
+        ref={(node) => drag(drop(node))}
+        style={style}
+        className="table"
+        onDragEnter={() => handleMouseEnterTable(name, "target")}
+        onDragStart={() => handleMouseEnterTable(name, "start")}
+      >
+        <div>
+          <h3>{name}</h3>
+          <ul>
+            <select
+              onChange={(e) => setSelectedField(e.target.value)}
+              value={selectedField}
+            >
+              <option value="">Select Field to Link</option>
+              {fields.map((f) => (
+                <option key={f} value={f}>
+                  {f}
+                </option>
+              ))}
+            </select>
+            <select
+              onChange={(e) => setTargetTable(e.target.value)}
+              value={targetTable}
+            >
+              <option value="">Select Target Table</option>
+              {tables
+                .filter((t) => t.name !== name)
+                .map((t) => (
+                  <option key={t.id} value={t.name}>
+                    {t.name}
                   </option>
                 ))}
-              </select>
+            </select>
+            {targetTable && (
               <select
-                onChange={(e) => setTargetTable(e.target.value)}
-                value={targetTable}
+                onChange={(e) => setTargetField(e.target.value)}
+                value={targetField}
               >
-                <option value="">Select Target Table</option>
+                <option value="">Select Target Field</option>
                 {tables
-                  .filter((t) => t.name !== name)
-                  .map((t) => (
-                    <option key={t.id} value={t.name}>
-                      {t.name}
+                  .find((t) => t.name === targetTable)
+                  ?.fields.map((f) => (
+                    <option key={f} value={f}>
+                      {f}
                     </option>
-                  ))}
+                  )) || <option value="">No Fields Available</option>}
               </select>
-              {targetTable && (
-                <select
-                  onChange={(e) => setTargetField(e.target.value)}
-                  value={targetField}
+            )}
+            <button onClick={() => handleFieldDrop(selectedField, "manual")}>
+              Add Link
+            </button>
+
+            {fields && fields.length > 0 ? (
+              fields.map((field) => (
+                <li
+                  key={field}
+                  onDragEnter={() => handleMouseEnterField(field)}
                 >
-                  <option value="">Select Target Field</option>
-                  {tables
-                    .find((t) => t.name === targetTable)
-                    ?.fields.map((f) => (
-                      <option key={f} value={f}>
-                        {f}
-                      </option>
-                    )) || <option value="">No Fields Available</option>}
-                </select>
-              )}
-              <button onClick={handleAddLink}>Add Link</button>
-            </li>
-          ))
-        ) : (
-          <li>No fields available</li>
-        )}
-      </ul>
-    </div>
+                  <Field field={field} table={name} />
+                </li>
+              ))
+            ) : (
+              <li>No fields available</li>
+            )}
+          </ul>
+        </div>
+      </div>{" "}
+    </>
   );
 };
 

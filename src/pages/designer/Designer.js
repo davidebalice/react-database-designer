@@ -9,8 +9,6 @@ const Designer = () => {
   const [tables, setTables] = useState([]);
   const [links, setLinks] = useState([]);
 
- 
-
   const addTable = () => {
     const newTable = {
       id: tables.length + 1,
@@ -35,14 +33,13 @@ const Designer = () => {
       { sourceTable, sourceField, targetTable, targetField },
     ]);
   };
-
+// <Diagram tables={tables} links={links} />
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="page">
         <div className="row justify-content-between">
           <button onClick={addTable}>Add Table</button>
-          <Canvas tables={tables} moveTable={moveTable} addLink={addLink} />
-          <Diagram tables={tables} links={links} />
+          <Canvas tables={tables} moveTable={moveTable} addLink={addLink} links={links} />
         </div>
       </div>
     </DndProvider>
