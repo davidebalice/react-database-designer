@@ -1,18 +1,11 @@
-
-
-
-
-
-
-
-  import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useDrop } from "react-dnd";
 import Table from "./Table";
 import Line from "./Line";
 
-const Canvas = ({ tables, moveTable, addLink, links }) => {
+const Canvas = ({ tables, moveTable, addLink, links,containerRef }) => {
   const tableRefs = useRef({});
-  const [lineData, setLineData] = useState(links); // Stato per memorizzare i dati delle linee
+  const [lineData, setLineData] = useState(links);
 
   const [fieldDrop, setFieldDrop] = useState("");
   const [tableDrop, setTableDrop] = useState("");
@@ -28,7 +21,7 @@ const Canvas = ({ tables, moveTable, addLink, links }) => {
         y: item.position.y + delta.y,
       };
       moveTable(item.id, newPos);
-      updateLineData(); 
+      updateLineData();
     },
   }));
 
@@ -45,7 +38,6 @@ const Canvas = ({ tables, moveTable, addLink, links }) => {
     setLineData(updatedLines);
   };
 
-  // Funzione per ottenere la posizione di un campo
   const getFieldPosition = (fieldId) => {
     const element = document.getElementById(fieldId);
     if (element) {
@@ -60,7 +52,6 @@ const Canvas = ({ tables, moveTable, addLink, links }) => {
     return null;
   };
 
-  // Aggiorna le linee quando cambiano i link o le tabelle
   useEffect(() => {
     updateLineData();
   }, [tables, links]);
@@ -77,6 +68,7 @@ const Canvas = ({ tables, moveTable, addLink, links }) => {
           end={targetPosition}
           color="black"
           strokeWidth={2}
+          containerRef={containerRef}
         />
       );
     });
@@ -89,7 +81,7 @@ const Canvas = ({ tables, moveTable, addLink, links }) => {
     targetField
   ) => {
     addLink(sourceTable, sourceField, targetTable, targetField);
-    updateLineData(); // Aggiorna le linee dopo aver aggiunto un link
+    updateLineData(); 
   };
 
   return (

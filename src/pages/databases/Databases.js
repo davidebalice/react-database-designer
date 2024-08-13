@@ -13,21 +13,13 @@ import Tooltip from "react-bootstrap/Tooltip";
 import { FaDatabase, FaDesktop, FaGithub } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
-import angular from "../../assets/img/angular.png";
-import javascript from "../../assets/img/javascript.png";
-import laravel from "../../assets/img/laravel.png";
-import node from "../../assets/img/node.png";
 import nophoto from "../../assets/img/nophoto.jpg";
-import php from "../../assets/img/php.png";
-import react from "../../assets/img/react.png";
-import spring from "../../assets/img/spring.png";
-import typescript from "../../assets/img/typescript.png";
 import Breadcrumb from "../../components/breadcrumb";
 import Loading from "../../components/loading";
 import Pagination from "../../components/pagination/Pagination";
 import { Context } from "../../context/UserContext";
 
-const Demos = () => {
+const Databases = () => {
   const { userData, demoMode } = useContext(Context);
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -38,11 +30,10 @@ const Demos = () => {
   const [reload, setReload] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(2);
-
   const token = localStorage.getItem("authToken");
 
   useEffect(() => {
-    let apiUrl = `${process.env.REACT_APP_API_BASE_URL}/api/demos?page=${page}`;
+    let apiUrl = `${process.env.REACT_APP_API_BASE_URL}/databases?user_id=1page=${page}`;
 
     if (tecnology) {
       apiUrl += `&tecnology=${tecnology}`;
@@ -57,7 +48,7 @@ const Demos = () => {
         },
       })
       .then((response) => {
-        setData(response.data.demos);
+        setData(response.data.databases);
         setLoading(false);
         setCurrentPage(response.data.currentPage);
         setTotalPages(response.data.totalPages);
@@ -66,36 +57,6 @@ const Demos = () => {
         console.error("Error during api call:", error);
       });
   }, [token, page, reload, tecnology]);
-
-  const tecnologyFunc = (str) => {
-    return str.split(",").map((tech) => tech.trim());
-  };
-
-  const getTechnologyIcon = (tech) => {
-    switch (tech) {
-      case "React":
-        return react;
-      case "React native":
-        return react;
-      case "Angular":
-        return angular;
-      case "Spring":
-        return spring;
-      case "Node":
-        return node;
-      case "Laravel":
-        return laravel;
-      case "Php":
-        return php;
-      case "Javascript":
-        return javascript;
-      case "Typescript":
-        return typescript;
-
-      default:
-        return null;
-    }
-  };
 
   const onDeleteDemo = (id) => {
     Swal.fire({
@@ -139,7 +100,7 @@ const Demos = () => {
     });
   };
 
-  const title = "Demos";
+  const title = "Databases";
 
   const brad = [
     {
@@ -180,40 +141,11 @@ const Demos = () => {
                 >
                   <div className="demoCard">
                     <div>
-                      {data.imageCover ? (
-                        <div
-                          className="demoCardCover"
-                          style={{
-                            backgroundImage: `url(${process.env.REACT_APP_API_BASE_URL}/api/demo/cover/${data.imageCover})`,
-                          }}
-                        >
-                          <div className="tecnologyContainer">
-                            {data.tecnology &&
-                              tecnologyFunc(data.tecnology).map(
-                                (tech, index) => (
-                                  <div key={index} className="tecnologyIcon">
-                                    <img
-                                      className="tecnologyImg"
-                                      src={getTechnologyIcon(tech)}
-                                      alt={tech}
-                                    />
-                                  </div>
-                                )
-                              )}
-                          </div>
-                        </div>
-                      ) : (
-                        <div
-                          className="demoCardCover"
-                          style={{
-                            backgroundImage: `url(${nophoto})`,
-                          }}
-                        ></div>
-                      )}
+                     
 
                       <div className="demoTextContainer">
                         <p className="demoDetailColumn">
-                          <span className="demoDetailTitle">{data.title}</span>
+                          <span className="demoDetailTitle">{data.name}</span>
                           <span className="demoDetailSubTitle">
                             {data.subtitle}
                           </span>
@@ -267,11 +199,11 @@ const Demos = () => {
                       )}
                     </div>
                     <div className="demoCardButtonContainer">
-                      <Link to={`/cover/demo/${data._id}`}>
+                      <Link to={`/designer/${data.id}`}>
                         <OverlayTrigger
                           placement="top"
                           overlay={
-                            <Tooltip className="tooltip">Photo Cover</Tooltip>
+                            <Tooltip className="tooltip">Designer</Tooltip>
                           }
                         >
                           <button className="btn btn-primary btn-sm demoCardButton">
@@ -281,7 +213,7 @@ const Demos = () => {
                                 className="demoCardIcon"
                               />
                             </div>
-                            <p className="demoCardButtonTitle">Cover</p>
+                            <p className="demoCardButtonTitle">Designer</p>
                           </button>
                         </OverlayTrigger>
                       </Link>
@@ -305,22 +237,7 @@ const Demos = () => {
                         </OverlayTrigger>
                       </Link>
 
-                      <Link to={`/demo/gallery/${data._id}`}>
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={<Tooltip className="tooltip">Tasks</Tooltip>}
-                        >
-                          <button className="btn btn-primary btn-sm demoCardButton">
-                            <div className="text-black iconContainer">
-                              <FontAwesomeIcon
-                                icon={faImage}
-                                className="demoCardIcon"
-                              />
-                            </div>
-                            <p className="demoCardButtonTitle">Gallery</p>
-                          </button>
-                        </OverlayTrigger>
-                      </Link>
+                 
 
                       <Link
                         onClick={() => {
@@ -365,4 +282,4 @@ const Demos = () => {
   );
 };
 
-export default Demos;
+export default Databases;

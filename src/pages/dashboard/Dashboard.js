@@ -1,10 +1,4 @@
-import { faTableList, faUser } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import axios from "axios";
-import { useContext, useEffect, useState } from "react";
-import Table from "react-bootstrap/Table";
-import CountUp from "react-countup";
-import Swal from "sweetalert2";
+
 import "../../App.css";
 import cover from "../../assets/img/cover.jpg";
 import github from "../../assets/img/github.png";
@@ -12,38 +6,9 @@ import db from "../../assets/img/logo.png";
 import node from "../../assets/img/node.jpg";
 import react from "../../assets/img/react.jpg";
 import react_node from "../../assets/img/react_node.png";
-import { Context } from "../../context/UserContext";
 
 export default function Dashboard() {
   const token = localStorage.getItem("authToken");
-  const { userData, demo } = useContext(Context);
-  const [data, setData] = useState({
-    demos: 0,
-    tasks: 0,
-    clients: 0,
-    users: 0,
-    activities: [],
-  });
-
-  useEffect(() => {
-    axios
-      .get(process.env.REACT_APP_API_BASE_URL + "/api/dashboard", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      })
-      .then((response) => {
-        console.log(response.data);
-        setData(response.data);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-
-        Swal.fire("Error", error, "error");
-      });
-  }, []);
 
   return (
     <>

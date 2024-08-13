@@ -1,16 +1,34 @@
-import React from "react";
+import React,{useEffect,useState} from "react";
 
-const Line = ({ start, end, color = "black", strokeWidth = 2 }) => {
-  const length = Math.sqrt(
-    Math.pow(end.x - start.x, 2) + Math.pow(end.y - start.y, 2)
-  );
-  const angle = Math.atan2(end.y - start.y, end.x - start.x) * (180 / Math.PI);
+const Line = ({ start, end, color = "black", strokeWidth = 2,containerRef }) => {
+    const [offsets, setOffsets] = useState({ top: 0, left: 0 });
+ // const marginTop = 100;
+ // const marginLeft = 250;
 
-  console.log("Line Start:", start);
-  console.log("Line End:", end);
 
-  const marginTop=100;
-  const marginLeft=230;
+  useEffect(() => {
+    const calculateOffsets = () => {
+      const container = containerRef.current;
+
+      if (container) {
+        const containerRect = container.getBoundingClientRect();
+
+        const offsetTop = containerRect.top;
+        const offsetLeft = containerRect.left;
+
+        setOffsets({ x: offsetTop, y: offsetLeft });
+      }
+    };
+
+    calculateOffsets();
+    window.addEventListener('resize', calculateOffsets);
+
+    return () => window.removeEventListener('resize', calculateOffsets);
+  }, []);
+
+  const controlX = (start.x - offsets.x + end.x - offsets.x) / 2 - 100;
+  const controlY = (start.y - offsets.y + end.y - offsets.y) / 2;
+  const dotRadius = 4;
 
   return (
     <svg
@@ -25,18 +43,27 @@ const Line = ({ start, end, color = "black", strokeWidth = 2 }) => {
       }}
       className="line-svg"
     >
-      <line
-        x1={start.x-marginLeft}
-        y1={start.y-marginTop}
-        x2={end.x-marginLeft}
-        y2={end.y-marginTop}
+      <path
+        d={`M ${start.x - offsets.x} ${
+          start.y - offsets.y
+        } Q ${controlX} ${controlY} ${end.x - offsets.x} ${end.y - offsets.y}`}
         stroke={color}
         strokeWidth={strokeWidth}
+        fill="none"
         strokeLinecap="round"
         style={{
           pointerEvents: "none",
         }}
       />
+      <circle
+        cx={start.x-offsets.x}
+        cy={start.y-offsets.y}
+        r={dotRadius}
+        fill={color}
+        stroke="none"
+      />
+
+      <circle cx={end.x-offsets.x} cy={end.y-offsets.y} r={dotRadius} fill={color} stroke="none" />
     </svg>
   );
 };

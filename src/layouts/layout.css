@@ -142,11 +142,6 @@ a {
 }
 
 .active::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  width: 2px;
-  height: 32px;
   background-color: var(--white-color);
 }
 .height-100 {
@@ -234,18 +229,10 @@ a {
   height: calc(100vh - 50px);
 }
 
-.tecnologiesContainer {
-  color: #fff;
-  margin-bottom: 30px;
-  margin-left: 58px;
-  margin-top: -10px;
-  line-height: 32px;
-}
-
-.tecnologiesContainer a {
-  color: #fff;
-}
-
-.tecnologiesContainer a:hover {
-  color: #f1f1f1;
+.headerMenu {
+  display: flex;
+  margin-top:24px;
+  align-items: center;
+  gap: 12px;
+  height:34px;
 }

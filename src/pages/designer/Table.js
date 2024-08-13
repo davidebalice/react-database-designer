@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import Field from "./Field";
-import Line from "./Line";
 
 const Table = ({
   id,
@@ -21,9 +20,6 @@ const Table = ({
   targetFieldDrop,
   setTargetFieldDrop,
 }) => {
-
-
-  
   const [{ isDragging }, drag] = useDrag({
     type: "TABLE",
     item: { id, position },
@@ -34,10 +30,11 @@ const Table = ({
       if (!monitor.didDrop()) {
         return;
       }
-    }
+    },
   });
 
   console.log(links);
+  console.log(position);
 
   const [{ isOver }, drop] = useDrop(
     () => ({
@@ -129,25 +126,8 @@ const Table = ({
     }
   };
 
-  
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
   return (
     <>
-    
       <div
         id={`table-${name}`}
         ref={(node) => drag(drop(node))}
@@ -216,7 +196,7 @@ const Table = ({
             )}
           </ul>
         </div>
-      </div>{" "}
+      </div>
     </>
   );
 };

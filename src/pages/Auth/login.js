@@ -15,7 +15,7 @@ const Login = () => {
 
   const loginHandle = () => {
     axios
-      .post(process.env.REACT_APP_API_BASE_URL + "/api/login", {
+      .post(process.env.REACT_APP_API_BASE_URL + "/login", {
         email: formData.email,
         password: formData.password,
       })

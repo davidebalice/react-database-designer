@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import "../../App.css";
 import Canvas from "./Canvas";
-import Diagram from "./Diagram";
 
 const Designer = () => {
+  const containerRef = useRef(null);
   const [tables, setTables] = useState([]);
   const [links, setLinks] = useState([]);
 
@@ -33,13 +33,19 @@ const Designer = () => {
       { sourceTable, sourceField, targetTable, targetField },
     ]);
   };
-// <Diagram tables={tables} links={links} />
+
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="page">
-        <div className="row justify-content-between">
+        <div  ref={containerRef}>
           <button onClick={addTable}>Add Table</button>
-          <Canvas tables={tables} moveTable={moveTable} addLink={addLink} links={links} />
+          <Canvas
+            tables={tables}
+            moveTable={moveTable}
+            addLink={addLink}
+            links={links}
+            containerRef={containerRef}
+          />
         </div>
       </div>
     </DndProvider>

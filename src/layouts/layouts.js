@@ -7,7 +7,6 @@ import {
   faX,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import axios from "axios";
 import "boxicons";
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -22,12 +21,10 @@ export default function Layouts() {
   const navigate = useNavigate();
   const location = useLocation();
   const pathname = location.pathname;
-  const [tecnologies, setTecnologies] = useState([]);
   const [render, setRender] = useState(true);
   const [headerToggle, setHeaderToggle] = useState(false);
   const [sidebar, setSidebar] = useState(false);
   const [headerNavManu, setheaderNavManu] = useState(true);
-  const defaultOpenSidebar = localStorage.getItem("defaultOpenSidebar");
   const mainBody = document.getElementById("mainBody");
   const token = localStorage.getItem("authToken");
 
@@ -45,41 +42,12 @@ export default function Layouts() {
   }, [pathname]);
 
   useEffect(() => {
-    if (defaultOpenSidebar === "open") {
-      setHeaderToggle(true);
-      setheaderNavManu(false);
-    } else if (defaultOpenSidebar === "close") {
-      setHeaderToggle(false);
-      setheaderNavManu(true);
-    }
-  }, []);
-
-  useEffect(() => {
-    axios
-      .get(process.env.REACT_APP_API_BASE_URL + `/api/tecnologies`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      })
-      .then((response) => {
-        setTecnologies(response.data.data.tecnologies);
-      })
-      .catch((error) => {
-        console.error("Error during api call:", error);
-      });
+    setHeaderToggle(false);
+    setheaderNavManu(true);
   }, []);
 
   const headerTogglehandle = () => {
-    setHeaderToggle(!headerToggle);
-    setheaderNavManu(!headerNavManu);
-    if (headerToggle === true) {
-      localStorage.setItem("defaultOpenSidebar", "close");
-    }
-    if (headerToggle === false) {
-      localStorage.setItem("defaultOpenSidebar", "open");
-    }
+    localStorage.setItem("defaultOpenSidebar", "close");
   };
 
   const showMobileMenu = () => {
@@ -146,16 +114,70 @@ export default function Layouts() {
               <FontAwesomeIcon icon={faBars} style={{ color: "white" }} />
             </div>
 
-            <div
-              onClick={headerTogglehandle}
-              className="header_toggle"
-              id="header-toggle"
-            >
-              {headerNavManu ? (
-                <FontAwesomeIcon icon={faBars} style={{ color: "white" }} />
-              ) : (
-                <FontAwesomeIcon icon={faX} style={{ color: "white" }} />
-              )}{" "}
+            <div className="headerMenu">
+              <Link
+                onClick={updateActive}
+                to="/"
+                key="dashboard"
+                className={`nav_link ${pathname === "/" && "active"}`}
+              >
+                <i className="bx bx-grid-alt nav_icon"></i>
+                <span className="nav_name">Dashboard</span>
+              </Link>
+
+              <Link
+                to="/databases"
+                key="databases"
+                onClick={updateActive}
+                className={`nav_link ${pathname === "/databases" && "active"}`}
+              >
+                <FontAwesomeIcon icon={faTableList} />
+                <span className="nav_name">Databases</span>
+              </Link>
+
+              <Link
+                to="/designer"
+                key="designer"
+                onClick={updateActive}
+                className={`nav_link ${pathname === "/designer" && "active"}`}
+              >
+                <FontAwesomeIcon icon={faTableList} />
+                <span className="nav_name">Designer</span>
+              </Link>
+
+
+              {userData && userData.role === "admin" && (
+                <>
+                  <Link
+                    to="/users"
+                    onClick={updateActive}
+                    key="users"
+                    className={`nav_link ${pathname === "/users" && "active"}`}
+                  >
+                    <FontAwesomeIcon icon={faUser} />
+                    <span className="nav_name">Users</span>
+                  </Link>
+                </>
+              )}
+
+              <Link
+                onClick={updateActive}
+                to="/profile"
+                key="profile"
+                className={`nav_link ${pathname === "/profile" && "active"}`}
+              >
+                <FontAwesomeIcon icon={faGear} />
+                <span className="nav_name">Profile</span>
+              </Link>
+              <Link
+                onClick={logoutHandle}
+                key="logout"
+                to="#"
+                className={`nav_link `}
+              >
+                <FontAwesomeIcon icon={faFileInvoice} />
+                <span className="nav_name">Logout</span>
+              </Link>
             </div>
             <div
               className="d-flex align-items-center dropdown-toggle"
@@ -253,8 +275,6 @@ export default function Layouts() {
                       <FontAwesomeIcon icon={faTableList} />
                       <span className="nav_name">Info</span>
                     </Link>
-
-                    
 
                     {userData && userData.role === "admin" && (
                       <>
