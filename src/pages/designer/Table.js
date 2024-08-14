@@ -137,7 +137,10 @@ const Table = ({
         onDragStart={() => handleMouseEnterTable(name, "start")}
       >
         <div>
-          <h3>{name}</h3>
+          <div className="tableHeader">
+            <span>{name}</span>
+            <div>opz</div>
+          </div>
           <ul>
             <select
               onChange={(e) => setSelectedField(e.target.value)}

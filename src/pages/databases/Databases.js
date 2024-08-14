@@ -237,8 +237,6 @@ const Databases = () => {
                         </OverlayTrigger>
                       </Link>
 
-                 
-
                       <Link
                         onClick={() => {
                           onDeleteDemo(data._id);

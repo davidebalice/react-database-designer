@@ -1,6 +1,6 @@
 :root {
-  --main-bg-color: #c3454e;
-  --main-bg-color-hover: #931922;
+  --main-bg-color: #74676b;
+  --main-bg-color-hover: #575153; 
   --main-text-color: #333;
   --secondary-bg-color: #282c34;
 }
@@ -6603,6 +6603,7 @@ span.select2-container.select2-container--default.select2-container--open {
 
 .table {
   margin: 0;
+  width: fit-content;
 }
 .table thead {
   background: #fafbfe;
@@ -10727,17 +10728,12 @@ label {
 }
 
 .table {
-  border: 1px solid #ccc;
-  padding: 10px;
+  border: 1px solid #ddd;
+  overflow: hidden;
+  box-shadow: 1px 1px 2px 0px rgb(0, 0, 0, 0.45);
   background-color: #f9f9f9;
   position: relative;
-}
-
-.field {
-  padding: 5px;
-  border: 1px solid #ddd;
-  background-color: #eee;
-  cursor: move;
+  border-radius: 6px;
 }
 
 .table .field {
@@ -10747,6 +10743,42 @@ label {
 .table-diagram {
   width: 550px;
   height: 200px;
+}
+
+.tableHeader {
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  background-color: var(--main-bg-color);
+  justify-content: space-between;
+}
+
+.tableHeader > span {
+  display: flex;
+  padding: 0px;
+  background: none;
+  color:white;
+  font-size:15px;
+  font-weight: bold;
+}
+
+.tableHeader > div {
+  display: flex;
+  padding: 0px;
+  background: none;
+}
+
+.field {
+  padding: 5px;
+  border: 1px solid #ddd;
+  background-color: #eee;
+  cursor: move;
+}
+
+.fieldDot {
+  width: 30px;
+  border: 2px solid;
 }
 
 .diagram-container {
@@ -10797,9 +10829,6 @@ label {
   background-color: none !important;
 }
 
-
 /*# sourceMappingURL=style.css.map */
 
 /* end  dashboard css */
-
-

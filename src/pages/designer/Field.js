@@ -22,7 +22,7 @@ const Field = ({ field, table }) => {
 
   return (
     <div ref={drag} style={style} className="field" >
-      <div id={`${table}-${field}`} style={{width:"10px"}}>pallino</div> {field}
+      <div id={`${table}-${field}`} className="fieldDot">pallino</div> <span>{field}</span>
     </div>
   );
 };

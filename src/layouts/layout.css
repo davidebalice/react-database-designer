@@ -87,7 +87,7 @@ a {
   left: -30%;
   width: var(--nav-width);
   height: 100vh;
-  background-color: #c4454e;
+  background-color: var(--main-bg-color);
   padding: 0.5rem 1rem 0 0;
   transition: 0.5s;
   z-index: var(--z-fixed);
@@ -231,8 +231,8 @@ a {
 
 .headerMenu {
   display: flex;
-  margin-top:24px;
+  margin-top: 24px;
   align-items: center;
   gap: 12px;
-  height:34px;
+  height: 34px;
 }

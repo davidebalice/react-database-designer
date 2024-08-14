@@ -6,7 +6,6 @@ import Line from "./Line";
 const Canvas = ({ tables, moveTable, addLink, links,containerRef }) => {
   const tableRefs = useRef({});
   const [lineData, setLineData] = useState(links);
-
   const [fieldDrop, setFieldDrop] = useState("");
   const [tableDrop, setTableDrop] = useState("");
   const [targetTableDrop, setTargetTableDrop] = useState("");
@@ -56,7 +55,6 @@ const Canvas = ({ tables, moveTable, addLink, links,containerRef }) => {
     updateLineData();
   }, [tables, links]);
 
-  // Renderizza le linee
   const renderLines = () => {
     return lineData.map((link, index) => {
       const { sourcePosition, targetPosition } = link;
