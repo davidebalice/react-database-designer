@@ -10774,10 +10774,12 @@ label {
   border: 1px solid #ddd;
   background-color: #eee;
   cursor: move;
+  display:flex;
+  gap:10px;
 }
 
 .fieldDot {
-  width: 30px;
+  width: 40px;
   border: 2px solid;
 }
 

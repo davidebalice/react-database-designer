@@ -1,3 +1,5 @@
+import { faGear } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import Field from "./Field";
@@ -33,8 +35,8 @@ const Table = ({
     },
   });
 
+  console.log('links');
   console.log(links);
-  console.log(position);
 
   const [{ isOver }, drop] = useDrop(
     () => ({
@@ -126,6 +128,11 @@ const Table = ({
     }
   };
 
+  const onClickTable = () => {
+   alert('3454');
+  };
+  
+
   return (
     <>
       <div
@@ -139,7 +146,9 @@ const Table = ({
         <div>
           <div className="tableHeader">
             <span>{name}</span>
-            <div>opz</div>
+            <div>
+              <FontAwesomeIcon icon={faGear} style={{ color: "white",cursor:"pointer" }}  onClick={onClickTable} />
+            </div>
           </div>
           <ul>
             <select

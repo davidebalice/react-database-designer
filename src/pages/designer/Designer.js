@@ -16,6 +16,10 @@ const Designer = () => {
     return localStorage.getItem("authToken");
   };
 
+
+  console.log("links");
+  console.log(links);
+
   useEffect(() => {
     const fetchTables = async () => {
       try {
@@ -30,13 +34,18 @@ const Designer = () => {
         );
         console.log("response.data");
         console.log(response.data.tables);
-        const transformedTables = response.data.tables.map((table) => ({
+        const formattedTables = response.data.tables.map((table) => ({
           ...table,
           position: { x: table.x, y: table.y },
           fields: table.fields.map((field) => field.name),
         }));
-
-        setTables(transformedTables);
+        const formattedLinks = response.data.links.map((link) => ({
+          ...link,
+          sourcePosition: { x: link.sourcePositionX, y: link.sourcePositionY },
+          targetPosition: { x: link.targetPositionX, y: link.targetPositionY },
+        }));
+        setTables(formattedTables);
+        setLinks(formattedLinks);
       } catch (error) {
         console.error("Error loading tables:", error);
       }
@@ -46,44 +55,37 @@ const Designer = () => {
   }, [id]);
 
   const updateTables = async () => {
+    console.log("tables");
+    console.log("links prima format");
+
+    
+    console.log(links);
+
+   
+
     try {
       const token = getAuthToken();
       const response = await axios.post(
         process.env.REACT_APP_API_BASE_URL + "update-tables",
+        { tables: tables, links: links, id: id },
         {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
-        },
-        tables
+        }
       );
       console.log("Response:", response);
     } catch (error) {
       console.error("Error updating tables:", error);
     }
   };
-/*
-  fetch("/api/update-tables", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(tables),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("Success:", data);
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
-*/
+
   const addTable = () => {
     const newTable = {
       id: tables.length + 1,
       name: `Table ${tables.length + 1}`,
-      fields: ["field1", "field2", "field3"],
+      fields: ["id"],
       position: { x: 100, y: 100 },
     };
     setTables([...tables, newTable]);
@@ -104,20 +106,19 @@ const Designer = () => {
     ]);
   };
 
-  console.log(tables);
-  console.log(tables);
-  console.log(tables);
 
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="page">
         <div ref={containerRef}>
-          <button onClick={addTable}>Add Table</button>
+          <button onClick={() => addTable()}>Add Table</button>
+          <button onClick={() => updateTables()}>Save</button>
           <Canvas
             tables={tables}
             moveTable={moveTable}
             addLink={addLink}
             links={links}
+            setLinks={setLinks}
             containerRef={containerRef}
           />
         </div>
