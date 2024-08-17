@@ -1,4 +1,3 @@
-
 import "../../App.css";
 import cover from "../../assets/img/cover.jpg";
 import github from "../../assets/img/github.png";
@@ -38,15 +37,13 @@ export default function Dashboard() {
                   <div className="row">
                     <div className="dashboardCol col-md-3 col-12">
                       <div className="dashboardDescription">
-                        <b className="dashboardText1">
-                          Demo admin panel 
-                          <br />
-                          for davidebalice.dev website
-                        </b>
+                        <b className="dashboardText1">Database designer</b>
                         <p className="dashboardText2">
-                          Demo admin panel developed in Node and React
+                          Create database, tables, fields and field links using
+                          the editor.
+                          <br />
+                          Export sql code generated.
                         </p>
-
                         <img
                           src={react_node}
                           className="dashboardLogo"
@@ -131,9 +128,6 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
-
-      
-        
       </div>
     </>
   );

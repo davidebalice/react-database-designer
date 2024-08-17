@@ -1,6 +1,6 @@
 :root {
   --main-bg-color: #74676b;
-  --main-bg-color-hover: #575153; 
+  --main-bg-color-hover: #575153;
   --main-text-color: #333;
   --secondary-bg-color: #282c34;
 }
@@ -1413,14 +1413,14 @@ div#global-loader,
 
 .btn-primary {
   color: #fff;
-  background-color: #17b0e9 !important;
-  border-color: #17b0e9 !important;
+  background-color: var(--main-bg-color) !important;
+  border-color: var(--main-bg-color) !important;
 }
 
 .btn-primary:hover {
   color: #fff;
-  background-color: #1b98c7 !important;
-  border-color: #1b98c7 !important;
+  background-color: var(--main-bg-color-hover) !important;
+  border-color: var(--main-bg-color-hover) !important;
 }
 
 .avatar {
@@ -9872,7 +9872,7 @@ span.select2-container.select2-container--default.select2-container--open {
   padding: 0 12px;
 }
 
-.demoCard {
+.rowItem {
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
   border: 1px solid #ccc;
@@ -9881,34 +9881,24 @@ span.select2-container.select2-container--default.select2-container--open {
   transform: translateY(0);
   transition: all 0.2s ease;
   display: flex !important;
-  flex-direction: column;
+  background: #fff;
+  flex-direction: row;
   justify-content: space-around;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
-.demoCard:hover {
+.rowItem:hover {
   transform: translateY(-10px);
 }
 
-.demoCardCover {
+.rowItemText {
   width: 100%;
-  height: 290px;
-  background-size: cover;
-  background-position: center center;
-  display: flex;
-  justify-content: end;
-  padding: 10px;
-}
-
-.demoCardText {
-  width: 100%;
-  height: 130px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
-.demoCardTitle {
+.rowItemTitle {
   width: 100%;
   display: flex;
   justify-content: center;
@@ -9916,12 +9906,11 @@ span.select2-container.select2-container--default.select2-container--open {
   font-size: 18px;
   font-weight: bold;
   padding: 18px;
-  height: 150px;
   flex-direction: column;
   text-align: center;
 }
 
-.demoCardLastUpdate {
+.rowItemLastUpdate {
   width: 100%;
   font-size: 14px;
   font-weight: normal;
@@ -9942,9 +9931,10 @@ span.select2-container.select2-container--default.select2-container--open {
   z-index: 4;
 }
 
-.demoCardButtonContainer {
-  width: 100%;
+.rowItemButtonContainer {
+  width: fit-content;
   display: flex;
+  gap:20px;
   flex-direction: row;
   border-top: 1px solid #ddd;
   background: #f1f1f1;
@@ -9953,13 +9943,17 @@ span.select2-container.select2-container--default.select2-container--open {
   align-items: center;
 }
 
-.demoCardLinkContainer {
+.rowItemLinkContainer {
   width: 100%;
   display: flex;
   flex-direction: row;
   padding: 14px;
   gap: 12px;
   align-items: center;
+}
+
+.iconEdit {
+  font-size: 30px;
 }
 
 .linkButtonLink {
@@ -10011,11 +10005,11 @@ span.select2-container.select2-container--default.select2-container--open {
   flex-direction: row;
   border-top: 1px solid #ddd;
   padding: 14px;
-  min-height: 200px;
+  min-height: 20px;
   justify-content: space-between;
 }
 
-.demoCardButton {
+.rowItemButton {
   margin-right: 20px;
   display: flex;
   width: 100%;
@@ -10027,11 +10021,11 @@ span.select2-container.select2-container--default.select2-container--open {
   gap: 12px;
 }
 
-.demoCardButton:hover {
+.rowItemButton:hover {
   background: #d1d1d1 !important;
 }
 
-.demoCardButtonTitle {
+.rowItemButtonTitle {
   font-size: 13px;
   color: #333;
   font-weight: bold;
@@ -10046,7 +10040,7 @@ span.select2-container.select2-container--default.select2-container--open {
   background: #999 !important;
 }
 
-.demoCardIcon {
+.rowItemIcon {
   font-size: 17px;
   color: #333;
 }
@@ -10273,12 +10267,12 @@ label {
   display: flex;
 }
 
-.demoDetailTitle {
-  font-size: 22px;
+.rowDetailTitle {
+  font-size: 24px !important;
   font-weight: bold;
 }
 
-.demoDetailData {
+.rowDetailData {
   display: flex;
   border-top: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
@@ -10289,19 +10283,19 @@ label {
   flex-wrap: wrap;
 }
 
-.demoDetailColumn {
+.rowDetailColumn {
   display: flex;
   flex-direction: column;
   align-items: start;
   justify-content: start;
 }
 
-.demoDetailTitle {
+.rowDetailTitle {
   font-weight: bold;
   font-size: 20px;
 }
 
-.demoDetailSubTitle {
+.rowDetailSubTitle {
   font-weight: bold;
   font-size: 16px;
 }
@@ -10323,71 +10317,6 @@ label {
   text-decoration-thickness: 0.07em;
   text-decoration-color: #999;
   text-decoration-skip-ink: auto;
-}
-
-.activityName {
-  color: #333;
-  font-size: 15px !important;
-}
-
-.activityCheckbox {
-  width: 22px;
-  height: 22px;
-}
-
-.activityButton {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  align-items: center;
-}
-
-.activityButtonEdit {
-  font-size: 19px;
-  color: #18b0e9;
-}
-
-.activityButtonDelete {
-  font-size: 16px;
-  color: #ff0000;
-}
-
-.screenshotCardContainer {
-  display: flex;
-  width: 100%;
-}
-
-.screenshotCard {
-  border: 1px solid #cccccc !important;
-  border-radius: 5px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  cursor: pointer;
-}
-
-.screenshotCardWrapper {
-  padding: 12px;
-}
-
-.screenshotCardHeader {
-  background-color: #f1f1f1;
-  display: flex;
-  flex-direction: row;
-  gap: 6px;
-  justify-content: space-between;
-  font-size: 14px;
-  padding: 6px;
-}
-
-.screenshotImg {
-  width: 100%;
-  height: auto;
-  transition: filter 0.3s;
-}
-
-.screenshotImg:hover {
-  filter: brightness(0.8);
 }
 
 .photoModal {
@@ -10624,8 +10553,13 @@ label {
   width: 90%;
 }
 
+.loginBox {
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 3px 4px 13px 0px rgb(0, 0, 0, 0.64);
+}
+
 .loginBackground {
-  background-image: url("./assets/img/bg1.jpg");
+  background-image: url("./assets/img/bg4.jpg");
   background-size: cover;
   width: 100%;
   height: 100vh;
@@ -10633,6 +10567,17 @@ label {
   position: fixed;
   top: 0;
   left: 0;
+}
+
+.loginLogo {
+  max-width: 150px;
+}
+
+.loginDemo {
+  margin-top: 20px;
+  border-top: 1px dashed #ddd;
+  padding-top: 20px;
+  line-height: 30px;
 }
 
 .mobileButton {
@@ -10758,8 +10703,8 @@ label {
   display: flex;
   padding: 0px;
   background: none;
-  color:white;
-  font-size:15px;
+  color: white;
+  font-size: 15px;
   font-weight: bold;
 }
 
@@ -10774,8 +10719,8 @@ label {
   border: 1px solid #ddd;
   background-color: #eee;
   cursor: move;
-  display:flex;
-  gap:10px;
+  display: flex;
+  gap: 10px;
 }
 
 .fieldDot {

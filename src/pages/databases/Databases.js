@@ -1,11 +1,12 @@
 import {
   faCirclePlus,
-  faImage,
   faNoteSticky,
   faPenToSquare,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { AiOutlineDatabase } from "react-icons/ai";
+import { PiFileSqlDuotone } from "react-icons/pi";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
@@ -13,7 +14,6 @@ import Tooltip from "react-bootstrap/Tooltip";
 import { FaDatabase, FaDesktop, FaGithub } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
-import nophoto from "../../assets/img/nophoto.jpg";
 import Breadcrumb from "../../components/breadcrumb";
 import Loading from "../../components/loading";
 import Pagination from "../../components/pagination/Pagination";
@@ -135,39 +135,18 @@ const Databases = () => {
 
             <div className="row">
               {data.map((data, i) => (
-                <div
-                  className="col-sm-4 col-md-4 col-lg-4 col-xl-3 "
-                  key={`demo${i}`}
-                >
-                  <div className="demoCard">
-                    <div>
-                     
-
-                      <div className="demoTextContainer">
-                        <p className="demoDetailColumn">
-                          <span className="demoDetailTitle">{data.name}</span>
-                          <span className="demoDetailSubTitle">
-                            {data.subtitle}
-                          </span>
-                        </p>
-                      </div>
+                <div className="col-12" key={`demo${i}`}>
+                  <div className="rowItem">
+                    <div className="demoTextContainer">
+                      <p className="rowDetailColumn">
+                        <span className="rowDetailTitle">{data.name}</span>
+                        <span className="rowDetailSubTitle">
+                          {data.summary}
+                        </span>
+                      </p>
                     </div>
-                    <div className="demoCardLinkContainer">
-                      {data.frontend && (
-                        <a
-                          href={data.frontend}
-                          target="_blank"
-                          title="frontend link"
-                          rel="noreferrer"
-                          className="linkButtonLink"
-                        >
-                          <div className="linkButton linkButtonFrontend">
-                            <FaDesktop />
-                            <span>Frontend</span>
-                          </div>
-                        </a>
-                      )}
 
+                    <div className="rowItemLinkContainer">
                       {data.backend && (
                         <a
                           href={data.backend}
@@ -182,23 +161,8 @@ const Databases = () => {
                           </div>
                         </a>
                       )}
-
-                      {data.github && (
-                        <a
-                          href={data.github}
-                          target="_blank"
-                          title="frontend link"
-                          rel="noreferrer"
-                          className="linkButtonLink"
-                        >
-                          <div className="linkButton linkButtonGithub">
-                            <FaGithub />
-                            <span>Github</span>
-                          </div>
-                        </a>
-                      )}
                     </div>
-                    <div className="demoCardButtonContainer">
+                    <div className="rowItemButtonContainer">
                       <Link to={`/designer/${data.id}`}>
                         <OverlayTrigger
                           placement="top"
@@ -206,17 +170,31 @@ const Databases = () => {
                             <Tooltip className="tooltip">Designer</Tooltip>
                           }
                         >
-                          <button className="btn btn-primary btn-sm demoCardButton">
+                          <button className="btn btn-primary btn-sm rowItemButton">
                             <div className="text-black iconContainer">
-                              <FontAwesomeIcon
-                                icon={faNoteSticky}
-                                className="demoCardIcon"
-                              />
+                              <AiOutlineDatabase className="iconEdit" />
                             </div>
-                            <p className="demoCardButtonTitle">Designer</p>
+                            <p className="rowItemButtonTitle">Designer</p>
                           </button>
                         </OverlayTrigger>
                       </Link>
+
+                      <Link to={`/designer/${data.id}`}>
+                        <OverlayTrigger
+                          placement="top"
+                          overlay={
+                            <Tooltip className="tooltip">Designer</Tooltip>
+                          }
+                        >
+                          <button className="btn btn-primary btn-sm rowItemButton">
+                            <div className="text-black iconContainer">
+                              <PiFileSqlDuotone className="iconEdit" />
+                            </div>
+                            <p className="rowItemButtonTitle">Sql</p>
+                          </button>
+                        </OverlayTrigger>
+                      </Link>
+
 
                       <Link to={`/edit/demo/${data._id}`}>
                         <OverlayTrigger
@@ -225,14 +203,14 @@ const Databases = () => {
                             <Tooltip className="tooltip">Edit demo</Tooltip>
                           }
                         >
-                          <button className="btn btn-primary btn-sm demoCardButton">
+                          <button className="btn btn-primary btn-sm rowItemButton">
                             <div className="text-black iconContainer">
                               <FontAwesomeIcon
                                 icon={faPenToSquare}
-                                className="demoCardIcon"
+                                className="rowItemIcon"
                               />
                             </div>
-                            <p className="demoCardButtonTitle">Edit</p>
+                            <p className="rowItemButtonTitle">Edit</p>
                           </button>
                         </OverlayTrigger>
                       </Link>
@@ -248,14 +226,14 @@ const Databases = () => {
                             <Tooltip className="tooltip">Delete demo</Tooltip>
                           }
                         >
-                          <button className="btn btn-primary btn-sm demoCardButton bg-red">
+                          <button className="btn btn-primary btn-sm rowItemButton bg-red">
                             <div className="text-black iconContainer">
                               <FontAwesomeIcon
                                 icon={faTrash}
-                                className="demoCardIcon"
+                                className="rowItemIcon"
                               />
                             </div>
-                            <p className="demoCardButtonTitle">Delete</p>
+                            <p className="rowItemButtonTitle">Delete</p>
                           </button>
                         </OverlayTrigger>
                       </Link>

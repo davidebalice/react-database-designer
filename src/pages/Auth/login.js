@@ -1,8 +1,8 @@
 import axios from "axios";
 import React, { useContext, useState } from "react";
-import ReCAPTCHA from "react-google-recaptcha";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import logo from "../../assets/img/logo.png";
 import { Context } from "../../context/UserContext";
 
 const Login = () => {
@@ -66,9 +66,11 @@ const Login = () => {
             style={{ height: "65vh" }}
           >
             <div className="col-md-5">
-              <div className="card">
+              <div className="card loginBox">
                 <div className="card-header border-bottom text-center">
-                  <h2>Login</h2>
+                  <img src={logo} class="loginLogo" alt="db logo" />
+                  <h2>Database Designer</h2>
+                  <span>developer in React and Node</span>
                 </div>
                 <div className="card-body">
                   <input
@@ -87,20 +89,21 @@ const Login = () => {
                     value={formData.password}
                     onChange={handleInput}
                   />
-                  <ReCAPTCHA
-                    sitekey={process.env.REACT_APP_SITE_KEY}
-                    onChange={onChange}
-                  />
+
                   <button
                     type="sumit"
                     onClick={loginHandle}
-                    className="btn btn-primary mt-2"
+                    className="btn btn-primary mt-2 w-100"
                   >
                     Login
                   </button>
-                  <Link to="/forgot-password">
-                    <p>Forgot Password</p>
-                  </Link>
+                  <div class="loginDemo">
+                    <b>Demo data</b>:
+                    <br />
+                    Email: mario@rossi.it
+                    <br />
+                    Password: 12345678
+                  </div>
                 </div>
               </div>
             </div>
