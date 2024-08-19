@@ -21,7 +21,13 @@ const Table = ({
   setTargetTableDrop,
   targetFieldDrop,
   setTargetFieldDrop,
+  setShowModal,
+  setSelectedTable
 }) => {
+  const [selectedField, setSelectedField] = useState("");
+  const [targetTable, setTargetTable] = useState("");
+  const [targetField, setTargetField] = useState("");
+
   const [{ isDragging }, drag] = useDrag({
     type: "TABLE",
     item: { id, position },
@@ -35,7 +41,7 @@ const Table = ({
     },
   });
 
-  console.log('links');
+  console.log("links");
   console.log(links);
 
   const [{ isOver }, drop] = useDrop(
@@ -50,10 +56,6 @@ const Table = ({
     }),
     [name]
   );
-
-  const [selectedField, setSelectedField] = useState("");
-  const [targetTable, setTargetTable] = useState("");
-  const [targetField, setTargetField] = useState("");
 
   const style = {
     left: position.x,
@@ -128,10 +130,10 @@ const Table = ({
     }
   };
 
-  const onClickTable = () => {
-   alert('3454');
+  const onOpenModal = (id) => {
+    setSelectedTable(id);
+    setShowModal(true);
   };
-  
 
   return (
     <>
@@ -147,7 +149,15 @@ const Table = ({
           <div className="tableHeader">
             <span>{name}</span>
             <div>
-              <FontAwesomeIcon icon={faGear} style={{ color: "white",cursor:"pointer" }}  onClick={onClickTable} />
+              {id > 0 && (
+                <FontAwesomeIcon
+                  icon={faGear}
+                  style={{ color: "white", cursor: "pointer" }}
+                  onClick={() => {
+                    onOpenModal(id);
+                  }}
+                />
+              )}
             </div>
           </div>
           <ul>

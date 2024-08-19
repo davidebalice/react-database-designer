@@ -14,11 +14,11 @@ import { Context } from "../../context/UserContext";
 import isAllowed from "../../middlewares/allow";
 import NotPermission from "../Auth/notPermission";
 
-const EditDemo = () => {
+const Edit = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("authToken");
   const { userData, demoMode } = useContext(Context);
-  const title = "Edit demo";
+  const title = "Edit database";
   const [file, setFile] = useState(null);
   const brad = [
     {
@@ -29,15 +29,9 @@ const EditDemo = () => {
     },
   ];
   const { id } = useParams();
-  const [clients, setClients] = useState([]);
   const [formData, setFormData] = useState({
     name: "",
-    budget: "",
-    client: "",
     summary: "",
-    description: "",
-    owner: "",
-    imageCover: "",
   });
 
   const handleInput = (event) => {
@@ -48,14 +42,9 @@ const EditDemo = () => {
     });
   };
 
-  const handleFile = (e) => {
-    const selectedFile = e.target.files[0];
-    setFile(selectedFile);
-  };
-
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_BASE_URL}/api/edit/demo/${id}`, {
+      .get(`${process.env.REACT_APP_API_BASE_URL}database/edit/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -63,8 +52,7 @@ const EditDemo = () => {
         },
       })
       .then((response) => {
-        setFormData(response.data.demo);
-        setClients(response.data.clients);
+        setFormData(response.data.database);
         console.log("response.data");
         console.log(response.data);
       })
@@ -89,7 +77,7 @@ const EditDemo = () => {
     } else {
       axios
         .post(
-          `${process.env.REACT_APP_API_BASE_URL}/api/edit/demo/${id}`,
+          `${process.env.REACT_APP_API_BASE_URL}database/edit/${id}`,
           formData,
           {
             headers: {
@@ -102,20 +90,18 @@ const EditDemo = () => {
         .then((response) => {
           console.log("response.data");
           console.log(response.data);
-          console.log("response.data.status");
-          console.log(response.data.status);
           if (response.data.status === "success") {
             Swal.fire({
-              title: "Demo updated",
+              title: "Database updated",
               text: "",
               icon: "success",
               showCancelButton: true,
-              confirmButtonText: "Back to demos",
+              confirmButtonText: "Back to databases",
               cancelButtonText: "Close",
             }).then((result) => {
               if (result.isConfirmed) {
                 if (response.data.status === "success") {
-                  navigate("/demos");
+                  navigate("/databases");
                 }
               }
             });
@@ -140,13 +126,13 @@ const EditDemo = () => {
       formData &&
       isAllowed(
         userData.role,
-        userData._id,
+        userData.id,
         formData.members,
         formData.owner
       ) ? (
         <div className="page">
           <div class="row">
-            <Link to={`/demos`}>
+            <Link to={`/databases`}>
               <div class="backButton col-sm-4 col-md-4 col-lg-3">
                 <FontAwesomeIcon
                   icon={faCircleChevronLeft}
@@ -162,72 +148,20 @@ const EditDemo = () => {
               <div className="row justify-content-center formContainer">
                 <div className="col-12 mt-3">
                   <label for="name">
-                    <b>Demo title</b>
+                    <b>Database name</b>
                   </label>
                   <input
                     type="text"
                     className="form-control"
-                    name="title"
+                    name="name"
                     required
-                    value={formData.title}
-                    onChange={handleInput}
-                  />
-                </div>
-                <div className="col-12 mt-3">
-                  <label for="subtitle">
-                    <b>Subtitle</b>
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="subtitle"
-                    value={formData.subtitle}
-                    onChange={handleInput}
-                  />
-                </div>
-                <div className="col-md-6 mt-3">
-                  <label for="tecnology">
-                    <b>Tecnology</b>
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="tecnology"
-                    value={formData.tecnology}
+                    value={formData.name}
                     onChange={handleInput}
                   />
                 </div>
 
-                <div className="col-md-6 mt-3">
-                  <label for="slug">
-                    <b>Slug</b>
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="slug"
-                    value={formData.slug}
-                    onChange={handleInput}
-                  />
-                </div>
-
-                <div className="col-md-6 mt-3">
-                  <label for="order">
-                    <b>Order</b>
-                  </label>
-                  <input
-                    type="number"
-                    className="form-control"
-                    name="order"
-                    value={formData.order}
-                    onChange={handleInput}
-                  />
-                </div>
-
-                <div className="col-md-6 mt-3"></div>
-
-                <Spacer height={40} />
-
+                <Spacer height={12} />
+               
                 <div className="col-md-12">
                   <label for="summary">
                     <b>Summary</b>
@@ -239,68 +173,9 @@ const EditDemo = () => {
                     onChange={handleInput}
                   ></textarea>
                 </div>
-
-                <Spacer height={40} />
-
-                <div className="col-md-12">
-                  <label for="description">
-                    <b>Full description</b>
-                  </label>
-                  <textarea
-                    className="form-control"
-                    name="description"
-                    value={formData.description}
-                    onChange={handleInput}
-                    style={{ height: "150px" }}
-                  ></textarea>
-                </div>
               </div>
 
-              <div className="col-md-6 mt-3"></div>
-              <Spacer height={40} />
-
-              <div className="row justify-content-center formContainer">
-                <div className="col-12">
-                  <b>Link</b>:
-                </div>
-                <div className="col-md-6 mt-3">
-                  <label for="slug">
-                    <b>Frontend</b>
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="frontend"
-                    value={formData.frontend}
-                    onChange={handleInput}
-                  />
-                </div>
-                <div className="col-md-6 mt-3">
-                  <label for="slug">
-                    <b>Backend</b>
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="backend"
-                    value={formData.backend}
-                    onChange={handleInput}
-                  />
-                </div>{" "}
-                <div className="col-md-6 mt-3">
-                  <label for="slug">
-                    <b>Github</b>
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="github"
-                    value={formData.github}
-                    onChange={handleInput}
-                  />
-                </div>
-                <div className="col-md-6 mt-3"></div>
-              </div>
+              <Spacer height={12} />
 
               <button
                 onClick={submitForm}
@@ -332,4 +207,4 @@ const EditDemo = () => {
   );
 };
 
-export default EditDemo;
+export default Edit;

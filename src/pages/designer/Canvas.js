@@ -3,7 +3,7 @@ import { useDrop } from "react-dnd";
 import Table from "./Table";
 import Line from "./Line";
 
-const Canvas = ({ tables, moveTable, addLink, links, setLinks, containerRef }) => {
+const Canvas = ({ tables, moveTable, addLink, links, setLinks, containerRef, setShowModal, setSelectedTable }) => {
   const tableRefs = useRef({});
   const [lineData, setLineData] = useState(links);
   const [fieldDrop, setFieldDrop] = useState("");
@@ -35,7 +35,6 @@ const Canvas = ({ tables, moveTable, addLink, links, setLinks, containerRef }) =
       };
     });
     setLineData(updatedLines);
-    //setLinks(updatedLines);
   };
 
   const getFieldPosition = (fieldId) => {
@@ -104,6 +103,8 @@ const Canvas = ({ tables, moveTable, addLink, links, setLinks, containerRef }) =
           setTargetTableDrop={setTargetTableDrop}
           targetFieldDrop={targetFieldDrop}
           setTargetFieldDrop={setTargetFieldDrop}
+          setShowModal={setShowModal}
+          setSelectedTable={setSelectedTable}
         />
       ))}
     </div>

@@ -24,7 +24,6 @@ const Databases = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const page = searchParams.get("page");
-  const tecnology = searchParams.get("tecnology");
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [reload, setReload] = useState(1);
@@ -33,11 +32,7 @@ const Databases = () => {
   const token = localStorage.getItem("authToken");
 
   useEffect(() => {
-    let apiUrl = `${process.env.REACT_APP_API_BASE_URL}/databases?user_id=1page=${page}`;
-
-    if (tecnology) {
-      apiUrl += `&tecnology=${tecnology}`;
-    }
+    let apiUrl = `${process.env.REACT_APP_API_BASE_URL}databases?user_id=1page=${page}`;
 
     axios
       .get(apiUrl, {
@@ -56,7 +51,7 @@ const Databases = () => {
       .catch((error) => {
         console.error("Error during api call:", error);
       });
-  }, [token, page, reload, tecnology]);
+  }, [token, page, reload]);
 
   const onDeleteDemo = (id) => {
     Swal.fire({
@@ -78,7 +73,7 @@ const Databases = () => {
         } else {
           axios
             .post(
-              `${process.env.REACT_APP_API_BASE_URL}/api/demo/delete/${id}`,
+              `${process.env.REACT_APP_API_BASE_URL}database/delete/${id}`,
               {
                 headers: {
                   Authorization: `Bearer ${token}`,
@@ -122,22 +117,22 @@ const Databases = () => {
         ) : (
           <>
             <div className="row">
-              <Link to={`/add/demo/`}>
+              <Link to={`/database/add`}>
                 <div className="addButton col-sm-4 col-md-4 col-lg-3">
                   <FontAwesomeIcon
                     icon={faCirclePlus}
                     className="addButtonIcon"
                   />
-                  <div className="card-body d-flex px-1">Add demo</div>
+                  <div className="card-body d-flex px-1">Add database</div>
                 </div>
               </Link>
             </div>
 
             <div className="row">
               {data.map((data, i) => (
-                <div className="col-12" key={`demo${i}`}>
+                <div className="col-12" key={`db${i}`}>
                   <div className="rowItem">
-                    <div className="demoTextContainer">
+                    <div className="dbTextContainer">
                       <p className="rowDetailColumn">
                         <span className="rowDetailTitle">{data.name}</span>
                         <span className="rowDetailSubTitle">
@@ -196,11 +191,11 @@ const Databases = () => {
                       </Link>
 
 
-                      <Link to={`/edit/demo/${data._id}`}>
+                      <Link to={`/database/edit/${data.id}`}>
                         <OverlayTrigger
                           placement="top"
                           overlay={
-                            <Tooltip className="tooltip">Edit demo</Tooltip>
+                            <Tooltip className="tooltip">Edit database</Tooltip>
                           }
                         >
                           <button className="btn btn-primary btn-sm rowItemButton">
@@ -217,13 +212,13 @@ const Databases = () => {
 
                       <Link
                         onClick={() => {
-                          onDeleteDemo(data._id);
+                          onDeleteDemo(data.id);
                         }}
                       >
                         <OverlayTrigger
                           placement="top"
                           overlay={
-                            <Tooltip className="tooltip">Delete demo</Tooltip>
+                            <Tooltip className="tooltip">Delete database</Tooltip>
                           }
                         >
                           <button className="btn btn-primary btn-sm rowItemButton bg-red">
@@ -248,7 +243,7 @@ const Databases = () => {
 
       {data && data.length > 0 && (
         <Pagination
-          pageName="demos"
+          pageName="databases"
           currentPage={currentPage}
           totalPages={totalPages}
           onPageChange={setCurrentPage}

@@ -3,7 +3,9 @@ import ForgotPassword from "../pages/Auth/forgotPassword";
 import Login from "../pages/Auth/login";
 import Register from "../pages/Auth/register";
 import Dashboard from "../pages/dashboard/Dashboard";
+import Add from "../pages/databases/Add";
 import Databases from "../pages/databases/Databases";
+import Edit from "../pages/databases/Edit";
 import Designer from "../pages/designer/Designer";
 import Profile from "../pages/profile/Profile";
 import AddUser from "../pages/users/AddUser";
@@ -17,6 +19,8 @@ export function AdminRoutes() {
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/databases" element={<Databases />} />
+        <Route path="/database/add" element={<Add />} />
+        <Route path="/database/edit/:id" element={<Edit />} />
         <Route path="/designer/:id" element={<Designer />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

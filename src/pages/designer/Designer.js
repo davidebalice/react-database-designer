@@ -5,17 +5,20 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { useParams } from "react-router-dom";
 import "../../App.css";
 import Canvas from "./Canvas";
+import Modal from "./Modal";
 
 const Designer = () => {
   const { id } = useParams();
   const containerRef = useRef(null);
   const [tables, setTables] = useState([]);
   const [links, setLinks] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedTable, setSelectedTable] = useState(0);
+  const [reload, setReload] = useState(0);
 
   const getAuthToken = () => {
     return localStorage.getItem("authToken");
   };
-
 
   console.log("links");
   console.log(links);
@@ -52,16 +55,13 @@ const Designer = () => {
     };
 
     fetchTables();
-  }, [id]);
+  }, [id, reload]);
 
   const updateTables = async () => {
     console.log("tables");
     console.log("links prima format");
 
-    
     console.log(links);
-
-   
 
     try {
       const token = getAuthToken();
@@ -83,7 +83,6 @@ const Designer = () => {
 
   const addTable = () => {
     const newTable = {
-      id: tables.length + 1,
       name: `Table ${tables.length + 1}`,
       fields: ["id"],
       position: { x: 100, y: 100 },
@@ -106,24 +105,33 @@ const Designer = () => {
     ]);
   };
 
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setReload((prevReload) => prevReload + 1);
+  };
 
   return (
-    <DndProvider backend={HTML5Backend}>
-      <div className="page">
-        <div ref={containerRef}>
-          <button onClick={() => addTable()}>Add Table</button>
-          <button onClick={() => updateTables()}>Save</button>
-          <Canvas
-            tables={tables}
-            moveTable={moveTable}
-            addLink={addLink}
-            links={links}
-            setLinks={setLinks}
-            containerRef={containerRef}
-          />
+    <>
+      <Modal show={showModal} handleClose={handleCloseModal} selectedTable={selectedTable}/>
+      <DndProvider backend={HTML5Backend}>
+        <div className="page">
+          <div ref={containerRef}>
+            <button onClick={() => addTable()}>Add Table</button>
+            <button onClick={() => updateTables()}>Save</button>
+            <Canvas
+              tables={tables}
+              moveTable={moveTable}
+              addLink={addLink}
+              links={links}
+              setLinks={setLinks}
+              containerRef={containerRef}
+              setShowModal={setShowModal}
+              setSelectedTable={setSelectedTable}
+            />
+          </div>
         </div>
-      </div>
-    </DndProvider>
+      </DndProvider>
+    </>
   );
 };
 
