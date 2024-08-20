@@ -778,6 +778,10 @@ strong {
   font-weight: 700;
 }
 
+.w-100{
+  width:100%;
+}
+
 /*** default values ***/
 /***** custom values *****/
 /***** Grid Values *****/
@@ -9934,7 +9938,7 @@ span.select2-container.select2-container--default.select2-container--open {
 .rowItemButtonContainer {
   width: fit-content;
   display: flex;
-  gap:20px;
+  gap: 20px;
   flex-direction: row;
   border-top: 1px solid #ddd;
   background: #f1f1f1;
@@ -10776,6 +10780,12 @@ label {
   background-color: none !important;
 }
 
+.flex-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -10791,7 +10801,6 @@ label {
 
 .modal-content {
   background: white;
-  padding: 20px;
   border-radius: 8px;
   max-width: 700px;
   max-height: 400px;
@@ -10804,6 +10813,15 @@ label {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 6px 12px;
+  border-bottom: 1px solid #ddd;
+  background-color: var(--main-bg-color);
+}
+
+.modal-header span {
+  font-weight: bold;
+  color: #fff;
+  font-size: 18px;
 }
 
 .close-btn {
@@ -10816,14 +10834,92 @@ label {
 .modal-body {
   margin-top: 10px;
   max-height: 600px;
+  padding: 12px;
   overflow-x: hidden;
   overflow-y: auto;
-  width:99%;
+  width: 99%;
 }
 
-.field-row{
-  width: 100%;
+.modal-icon {
+  color: #fff;
+  font-size: 19px;
+  cursor: pointer;
 }
+
+.modal-icon:hover {
+  color: #f1f1f1;
+}
+
+.modal-icon2 {
+  color: #444;
+  font-size: 19px;
+  cursor: pointer;
+}
+
+.modal-icon2:hover {
+  color: #888;
+}
+
+.modal-button {
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 10px 20px;
+  background: none;
+  border-radius: 4px;
+  color:#fff
+}
+
+.modal-button:hover {
+  background: var(--main-bg-color-hover);
+}
+
+.modal-button-container{
+  display: flex;
+  align-items: center;
+  gap:2px
+}
+
+.modal-title-input{
+  padding:4px;
+  border:none;
+  box-shadow: 0px 0px 16px 0px rgb(0, 0, 0,0.32) inset;
+  border-radius:4px
+}
+
+.field-row {
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  padding:4px 6px;
+}
+
+
+.field-row:nth-child(even) {
+  background-color: #f0f0f0;
+}
+
+.field-row:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+
+.field-row > div:nth-child(1) {
+  width:30px;
+}
+
+.field-row > div:nth-child(2) {
+  width:200px;
+}
+
+.field-row > div:nth-child(3) {
+  width:100px;
+}
+
+
+
+
 
 /*# sourceMappingURL=style.css.map */
 
