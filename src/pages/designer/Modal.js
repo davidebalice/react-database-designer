@@ -3,15 +3,22 @@ import {
   faClose,
   faPenToSquare,
   faSave,
+  faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { FaKey } from "react-icons/fa";
+import { GoNumber } from "react-icons/go";
+import { IoMdCheckmarkCircleOutline } from "react-icons/io";
+import { MdDateRange } from "react-icons/md";
+import { PiTextTBold } from "react-icons/pi";
 
 const Modal = ({ show, handleClose, selectedTable }) => {
   const [tableData, setTableData] = useState(null);
   const [modTitle, setModTitle] = useState(false);
   const [modField, setModField] = useState("");
+  const [delField, setDelField] = useState("");
   const [loading, setLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -129,6 +136,50 @@ const Modal = ({ show, handleClose, selectedTable }) => {
     }));
   };
 
+  const handleCheckboxChange = (e, fieldId) => {
+    const { name, checked } = e.target;
+    console.log("checked");
+    console.log(name);
+    console.log(checked);
+    setTableData((prevData) => ({
+      ...prevData,
+      fields: prevData.fields.map((field) =>
+        field.id === fieldId ? { ...field, [name]: checked ? 1 : 0 } : field
+      ),
+    }));
+  };
+
+  const onDeleteField = (fieldId) => {
+    setDelField(fieldId);
+  };
+
+  const prevDeleteField = () => {
+    setDelField("");
+  };
+
+  const deleteField = async (fieldId) => {
+    try {
+      const token = getAuthToken();
+      await axios.post(
+        `${process.env.REACT_APP_API_BASE_URL}field/delete/${fieldId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setTableData((prevData) => ({
+        ...prevData,
+        fields: prevData.fields.filter((field) => field.id !== fieldId),
+      }));
+      setDelField("");
+
+    } catch (error) {
+      console.error("Error deleting field:", error);
+    }
+  };
+
   if (!show) return null;
 
   return (
@@ -185,60 +236,218 @@ const Modal = ({ show, handleClose, selectedTable }) => {
           {loading ? (
             <p>Loading...</p>
           ) : tableData ? (
-            <div>
-              <ul className="w-100">
-                {tableData.fields.map((field) => (
-                  <li key={field.id} className="field-row">
-                    {modField === field.id ? (
-                      <>
-                        <div>key</div>
-                        <div>
-                          <input
-                            type="text"
-                            name="name"
-                            value={field.name}
-                            onChange={(e) => handleInputChange(e, field.id)}
-                            placeholder="Field Name"
-                          />
-                        </div>
-                        <div>
-                          <select
-                            name="field_type"
-                            value={field.field_type}
-                            onChange={(e) => handleFieldChange(e, field.id)}
-                          >
-                            {fieldTypes.map((type) => (
-                              <option key={type} value={type}>
-                                {type}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                        <div onClick={() => setModField("")}>
-                          <FontAwesomeIcon
-                            icon={faClose}
-                            className="modal-icon2"
-                          />
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <div>key</div>
-                        <div>{field.name}</div>
-                        <div>{field.field_type}</div>
+            <>
+              <div className="field-row field-header">
+                <div>pk</div>
+                <div></div>
+                <div>name</div>
+                <div>type</div>
+                <div>lenght</div>
+                <div>default</div>
+                <div>pri</div>
+                <div>ai</div>
+                <div>null</div>
+                <div>index</div>
+                <div></div>
+              </div>
 
-                        <div onClick={() => setModField(field.id)}>
-                          <FontAwesomeIcon
-                            icon={faPenToSquare}
-                            className="modal-icon2"
-                          />
-                        </div>
-                      </>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </div>
+              <div>
+                <ul className="w-100">
+                  {tableData.fields.map((field) => (
+                    <li key={field.id} className="field-row">
+                      {modField === field.id ? (
+                        <>
+                          <div></div>
+                          <div></div>
+                          <div>
+                            <input
+                              type="text"
+                              name="name"
+                              value={field.name}
+                              onChange={(e) => handleInputChange(e, field.id)}
+                              placeholder="Field Name"
+                              className="inputField"
+                            />
+                          </div>
+                          <div>
+                            <select
+                              name="field_type"
+                              value={field.field_type}
+                              onChange={(e) => handleFieldChange(e, field.id)}
+                              className="inputField"
+                            >
+                              {fieldTypes.map((type) => (
+                                <option key={type} value={type}>
+                                  {type}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                          <div>
+                            <input
+                              type="text"
+                              name="lenght"
+                              value={field.lenght}
+                              onChange={(e) => handleInputChange(e, field.id)}
+                              placeholder="Lenght"
+                              className="inputField"
+                            />
+                          </div>
+                          <div>
+                            <input
+                              type="text"
+                              name="default_value"
+                              value={field.default_value}
+                              onChange={(e) => handleInputChange(e, field.id)}
+                              placeholder="Default value"
+                              className="inputField"
+                            />
+                          </div>
+                          <div>
+                            <input
+                              type="checkbox"
+                              name="primary_field"
+                              checked={field.primary_field === 1}
+                              className="checkboxField"
+                              onChange={(e) =>
+                                handleCheckboxChange(e, field.id)
+                              }
+                            />
+                          </div>
+                          <div>
+                            <input
+                              type="checkbox"
+                              name="ai"
+                              checked={field.ai === 1}
+                              className="checkboxField"
+                              onChange={(e) =>
+                                handleCheckboxChange(e, field.id)
+                              }
+                            />
+                          </div>
+                          <div>
+                            <input
+                              type="checkbox"
+                              name="nullable"
+                              checked={field.nullable === 1}
+                              className="checkboxField"
+                              onChange={(e) =>
+                                handleCheckboxChange(e, field.id)
+                              }
+                            />
+                          </div>
+                          <div>
+                            <input
+                              type="checkbox"
+                              name="index_field"
+                              checked={field.index_field === 1}
+                              className="checkboxField"
+                              onChange={(e) =>
+                                handleCheckboxChange(e, field.id)
+                              }
+                            />
+                          </div>
+                          <div onClick={() => setModField("")}>
+                            <FontAwesomeIcon
+                              icon={faClose}
+                              className="modal-icon2 mt-1"
+                            />
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          {delField === field.id ? (
+                            <>
+                              <div></div>
+                              <div></div>
+                              <div>Confirm delete?</div>
+                              <div
+                                className="deleteButton"
+                                onClick={() => deleteField(field.id)}
+                              >
+                                ok
+                              </div>
+                              <div
+                                className="deleteButton"
+                                onClick={() => prevDeleteField()}
+                              >
+                                no
+                              </div>
+                            </>
+                          ) : (
+                            <>
+                              <div className="fieldIcon">
+                                {field.primary_field === 1 ? (
+                                  <FaKey
+                                    style={{
+                                      color: "#c2b812",
+                                      fontSize: "18px",
+                                    }}
+                                  />
+                                ) : field.index_field === 1 ? (
+                                  <FaKey
+                                    style={{ color: "#999", fontSize: "18px" }}
+                                  />
+                                ) : (
+                                  ""
+                                )}
+                              </div>
+                              <div className="fieldIcon">
+                                {field.field_type === "varchar" ||
+                                field.field_type === "text" ? (
+                                  <PiTextTBold style={{ fontSize: "22px" }} />
+                                ) : field.field_type === "date" ||
+                                  field.field_type === "datetime" ? (
+                                  <MdDateRange />
+                                ) : (
+                                  <GoNumber style={{ fontSize: "22px" }} />
+                                )}
+                              </div>
+                              <div>{field.name}</div>
+                              <div>{field.field_type}</div>
+                              <div>{field.lenght}</div>
+                              <div>{field.default_value}</div>
+                              <div>
+                                {field.primary_field === 1 && (
+                                  <IoMdCheckmarkCircleOutline />
+                                )}
+                              </div>
+                              <div>
+                                {field.ai === 1 && (
+                                  <IoMdCheckmarkCircleOutline />
+                                )}
+                              </div>
+                              <div>
+                                {field.nullable === 1 && (
+                                  <IoMdCheckmarkCircleOutline />
+                                )}
+                              </div>
+                              <div>
+                                {field.index_field === 1 && (
+                                  <IoMdCheckmarkCircleOutline />
+                                )}
+                              </div>
+                              <div>
+                                <FontAwesomeIcon
+                                  icon={faPenToSquare}
+                                  className="modal-icon2"
+                                  onClick={() => setModField(field.id)}
+                                />
+                                <FontAwesomeIcon
+                                  icon={faTrash}
+                                  className="modal-icon2 trash"
+                                  onClick={() => onDeleteField(field.id)}
+                                />
+                              </div>
+                            </>
+                          )}
+                        </>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </>
           ) : (
             <p>Fileds not found</p>
           )}

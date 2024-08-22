@@ -778,8 +778,8 @@ strong {
   font-weight: 700;
 }
 
-.w-100{
-  width:100%;
+.w-100 {
+  width: 100%;
 }
 
 /*** default values ***/
@@ -6608,6 +6608,7 @@ span.select2-container.select2-container--default.select2-container--open {
 .table {
   margin: 0;
   width: fit-content;
+  min-width: 320px;
 }
 .table thead {
   background: #fafbfe;
@@ -6675,6 +6676,10 @@ span.select2-container.select2-container--default.select2-container--open {
     min-height: auto;
     margin-bottom: 15px;
   }
+}
+
+.table li {
+  padding: 0px 4px;
 }
 
 .max-widthauto {
@@ -10685,7 +10690,7 @@ label {
   border-radius: 6px;
 }
 
-.table .field {
+.table {
   margin-bottom: 5px;
 }
 
@@ -10724,12 +10729,29 @@ label {
   background-color: #eee;
   cursor: move;
   display: flex;
-  gap: 10px;
+  gap: 4px;
+  margin-bottom: 2px;
 }
 
-.fieldDot {
-  width: 40px;
-  border: 2px solid;
+.field span {
+  margin-left: 10px;
+}
+
+.fieldIcon {
+  width: 24px;
+  text-align: center;
+}
+
+.gear {
+  color: white;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.gear:hover {
+  color: #f1f1f1;
+  cursor: pointer;
+  transform: scale(1.2);
 }
 
 .diagram-container {
@@ -10802,7 +10824,7 @@ label {
 .modal-content {
   background: white;
   border-radius: 8px;
-  max-width: 700px;
+  max-width: 800px;
   max-height: 400px;
   overflow: hidden;
   width: 100%;
@@ -10832,7 +10854,6 @@ label {
 }
 
 .modal-body {
-  margin-top: 10px;
   max-height: 600px;
   padding: 12px;
   overflow-x: hidden;
@@ -10868,33 +10889,32 @@ label {
   padding: 10px 20px;
   background: none;
   border-radius: 4px;
-  color:#fff
+  color: #fff;
 }
 
 .modal-button:hover {
   background: var(--main-bg-color-hover);
 }
 
-.modal-button-container{
+.modal-button-container {
   display: flex;
   align-items: center;
-  gap:2px
+  gap: 2px;
 }
 
-.modal-title-input{
-  padding:4px;
-  border:none;
-  box-shadow: 0px 0px 16px 0px rgb(0, 0, 0,0.32) inset;
-  border-radius:4px
+.modal-title-input {
+  padding: 4px;
+  border: none;
+  box-shadow: 0px 0px 16px 0px rgb(0, 0, 0, 0.32) inset;
+  border-radius: 4px;
 }
 
 .field-row {
   display: flex;
   flex-direction: row;
   gap: 4px;
-  padding:4px 6px;
+  padding: 4px 6px;
 }
-
 
 .field-row:nth-child(even) {
   background-color: #f0f0f0;
@@ -10904,22 +10924,93 @@ label {
   background-color: #ffffff;
 }
 
-
 .field-row > div:nth-child(1) {
-  width:30px;
+  width: 30px;
 }
 
 .field-row > div:nth-child(2) {
-  width:200px;
+  width: 30px;
 }
 
 .field-row > div:nth-child(3) {
-  width:100px;
+  width: 150px;
 }
 
+.field-row > div:nth-child(4) {
+  width: 100px;
+}
 
+.field-row > div:nth-child(5) {
+  width: 100px;
+}
 
+.field-row > div:nth-child(6) {
+  width: 100px;
+}
 
+.field-row > div:nth-child(7) {
+  width: 50px;
+}
+
+.field-row > div:nth-child(8) {
+  width: 50px;
+}
+
+.field-row > div:nth-child(9) {
+  width: 50px;
+}
+
+.field-row > div:nth-child(10) {
+  width: 50px;
+}
+
+.field-row > div:nth-child(11) {
+  width: 50px;
+  text-align: right;
+}
+
+.field-header {
+  font-size: 13px;
+  border-bottom: 1px solid #ddd;
+  padding-top: 0;
+}
+
+.inputField {
+  width: 100%;
+  height: 26px;
+  margin-top: 2px;
+  border: 1px solid #ddd;
+}
+
+.trash {
+  color: #ff0000;
+  font-size: 17px;
+  margin-left: 10px;
+}
+
+.checkboxField {
+  margin: 0 auto;
+  width: 18px;
+  height: 18px;
+  margin-top: 6px;
+}
+
+.deleteButton {
+  font-size: 14px;
+  background: #444;
+  color: #fff;
+  text-align: center;
+  border-radius: 4px;
+  cursor:pointer
+}
+
+.deleteButton:hover {
+  font-size: 14px;
+  background: #999;
+  color: #fff;
+  text-align: center;
+  border-radius: 4px;
+}
 
 /*# sourceMappingURL=style.css.map */
 

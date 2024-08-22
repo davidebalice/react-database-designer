@@ -40,7 +40,7 @@ const Designer = () => {
         const formattedTables = response.data.tables.map((table) => ({
           ...table,
           position: { x: table.x, y: table.y },
-          fields: table.fields.map((field) => field.name),
+          fields: table.fields,
         }));
         const formattedLinks = response.data.links.map((link) => ({
           ...link,
@@ -112,7 +112,11 @@ const Designer = () => {
 
   return (
     <>
-      <Modal show={showModal} handleClose={handleCloseModal} selectedTable={selectedTable}/>
+      <Modal
+        show={showModal}
+        handleClose={handleCloseModal}
+        selectedTable={selectedTable}
+      />
       <DndProvider backend={HTML5Backend}>
         <div className="page">
           <div ref={containerRef}>
