@@ -5,6 +5,7 @@ import Register from "../pages/Auth/register";
 import Dashboard from "../pages/dashboard/Dashboard";
 import Add from "../pages/databases/Add";
 import Databases from "../pages/databases/Databases";
+import Sql from "../pages/sql/sql";
 import Edit from "../pages/databases/Edit";
 import Designer from "../pages/designer/Designer";
 import Profile from "../pages/profile/Profile";
@@ -22,6 +23,7 @@ export function AdminRoutes() {
         <Route path="/database/add" element={<Add />} />
         <Route path="/database/edit/:id" element={<Edit />} />
         <Route path="/designer/:id" element={<Designer />} />
+        <Route path="/sql/:id" element={<Sql />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />

@@ -32,7 +32,7 @@ const Databases = () => {
   const token = localStorage.getItem("authToken");
 
   useEffect(() => {
-    let apiUrl = `${process.env.REACT_APP_API_BASE_URL}databases?user_id=1page=${page}`;
+    let apiUrl = `${process.env.REACT_APP_API_BASE_URL}databases?page=${page}`;
 
     axios
       .get(apiUrl, {
@@ -174,7 +174,7 @@ const Databases = () => {
                         </OverlayTrigger>
                       </Link>
 
-                      <Link to={`/designer/${data.id}`}>
+                      <Link to={`/sql/${data.id}`}>
                         <OverlayTrigger
                           placement="top"
                           overlay={
@@ -189,7 +189,6 @@ const Databases = () => {
                           </button>
                         </OverlayTrigger>
                       </Link>
-
 
                       <Link to={`/database/edit/${data.id}`}>
                         <OverlayTrigger
