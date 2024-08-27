@@ -2,41 +2,67 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "../../App.css";
 import Canvas from "./Canvas";
 import Modal from "./Modal";
 
 const Designer = () => {
-  const { id } = useParams();
+  let { id } = useParams();
+  if (!id) {
+    id = 0;
+  }
   const containerRef = useRef(null);
+  const navigate = useNavigate();
   const [tables, setTables] = useState([]);
   const [links, setLinks] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedTable, setSelectedTable] = useState(0);
   const [reload, setReload] = useState(0);
+  const [databases, setDatabases] = useState([]);
+  const [selectedDatabase, setSelectedDatabase] = useState(id);
 
   const getAuthToken = () => {
     return localStorage.getItem("authToken");
   };
 
-  console.log("links");
-  console.log(links);
-
   useEffect(() => {
-    const fetchTables = async () => {
+    const fetchDatabases = async () => {
       try {
         const token = getAuthToken();
         const response = await axios.get(
-          process.env.REACT_APP_API_BASE_URL + "tables?database_id=" + id,
+          process.env.REACT_APP_API_BASE_URL + "databases",
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
         );
-        console.log("response.data");
-        console.log(response.data.tables);
+        setDatabases(response.data.databases);
+        if (id === 0 && response.data.databases.length > 0) {
+          console.log(response.data.databases[0].id);
+          setSelectedDatabase(response.data.databases[0].id);
+        }
+      } catch (error) {
+        console.error("Error loading databases:", error);
+      }
+    };
+
+    fetchDatabases();
+  }, []);
+
+  useEffect(() => {
+    const fetchTables = async () => {
+      try {
+        const token = getAuthToken();
+        const response = await axios.get(
+          process.env.REACT_APP_API_BASE_URL + "tables?database_id=" + selectedDatabase,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         const formattedTables = response.data.tables.map((table) => ({
           ...table,
           position: { x: table.x, y: table.y },
@@ -55,14 +81,9 @@ const Designer = () => {
     };
 
     fetchTables();
-  }, [id, reload]);
+  }, [selectedDatabase, reload]);
 
   const updateTables = async () => {
-    console.log("tables");
-    console.log("links prima format");
-
-    console.log(links);
-
     try {
       const token = getAuthToken();
       const response = await axios.post(
@@ -110,6 +131,12 @@ const Designer = () => {
     setReload((prevReload) => prevReload + 1);
   };
 
+  const handleDatabaseChange = (e) => {
+    const newDatabaseId = e.target.value;
+    setSelectedDatabase(newDatabaseId);
+    navigate(`/designer/${newDatabaseId}`);
+  };
+
   return (
     <>
       <Modal
@@ -122,6 +149,13 @@ const Designer = () => {
           <div ref={containerRef}>
             <button onClick={() => addTable()}>Add Table</button>
             <button onClick={() => updateTables()}>Save</button>
+            <select value={selectedDatabase} onChange={handleDatabaseChange}>
+              {databases.map((db) => (
+                <option key={db.id} value={db.id}>
+                  {db.name}
+                </option>
+              ))}
+            </select>
             <Canvas
               tables={tables}
               moveTable={moveTable}

@@ -1,18 +1,54 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const Sql = () => {
-  const { id } = useParams();
+  let { id } = useParams();
+  if (!id) {
+    id = 0;
+  }
   const [tables, setTables] = useState([]);
   const [links, setLinks] = useState([]);
   const [sql, setSql] = useState("");
   const [copyButtonText, setCopyButtonText] = useState("Copy");
   const [selectedCharset, setSelectedCharset] = useState("utf8mb4");
   const [selectedEngine, setSelectedEngine] = useState("InnoDB");
+  const [databases, setDatabases] = useState([]);
+  const [selectedDatabase, setSelectedDatabase] = useState(id);
+
+  const navigate = useNavigate();
+
+  const getAuthToken = () => {
+    return localStorage.getItem("authToken");
+  };
 
   useEffect(() => {
-    let apiUrl = `${process.env.REACT_APP_API_BASE_URL}sql?database_id=${id}`;
+    const fetchDatabases = async () => {
+      try {
+        const token = getAuthToken();
+        const response = await axios.get(
+          process.env.REACT_APP_API_BASE_URL + "databases",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setDatabases(response.data.databases);
+        if (id === 0 && response.data.databases.length > 0) {
+          console.log(response.data.databases[0].id);
+          setSelectedDatabase(response.data.databases[0].id);
+        }
+      } catch (error) {
+        console.error("Error loading databases:", error);
+      }
+    };
+
+    fetchDatabases();
+  }, []);
+
+  useEffect(() => {
+    let apiUrl = `${process.env.REACT_APP_API_BASE_URL}sql?database_id=${selectedDatabase}`;
     const token = localStorage.getItem("authToken");
 
     axios
@@ -31,7 +67,7 @@ const Sql = () => {
       .catch((error) => {
         console.error("Error during api call:", error);
       });
-  }, []);
+  }, [selectedDatabase]);
 
   useEffect(() => {
     const generateSQL = () => {
@@ -133,6 +169,12 @@ CREATE TABLE `api1_migrations` (
     );
   };
 
+  const handleDatabaseChange = (e) => {
+    const newDatabaseId = e.target.value;
+    setSelectedDatabase(newDatabaseId);
+    navigate(`/sql/${newDatabaseId}`);
+  };
+
   return (
     <div className="page">
       <h4 className="mb-3">Generated SQL</h4>
@@ -167,6 +209,13 @@ CREATE TABLE `api1_migrations` (
         </label>
       </div>
 
+      <select value={selectedDatabase} onChange={handleDatabaseChange}>
+        {databases.map((db) => (
+          <option key={db.id} value={db.id}>
+            {db.name}
+          </option>
+        ))}
+      </select>
 
       <pre
         style={{
@@ -180,21 +229,22 @@ CREATE TABLE `api1_migrations` (
           wordWrap: "break-word",
         }}
       >
+        <button
+          onClick={copyToClipboard}
+          style={{
+            position: "absolute",
+            marginTop: "10px",
+            right: "20px",
+            padding: "5px 10px",
+            fontSize: "12px",
+            cursor: "pointer",
+          }}
+        >
+          {copyButtonText}
+        </button>
+
         {sql}
       </pre>
-      <button
-        onClick={copyToClipboard}
-        style={{
-          position: "absolute",
-          top: "10px",
-          right: "10px",
-          padding: "5px 10px",
-          fontSize: "12px",
-          cursor: "pointer",
-        }}
-      >
-        {copyButtonText}
-      </button>
     </div>
   );
 };

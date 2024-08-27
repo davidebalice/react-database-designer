@@ -1,14 +1,12 @@
-import {
-  faBars,
-  faFileInvoice,
-  faGear,
-  faTableList,
-  faUser,
-  faX,
-} from "@fortawesome/free-solid-svg-icons";
+import { faBars, faTableList, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "boxicons";
 import React, { useContext, useEffect, useState } from "react";
+import { FaInfoCircle } from "react-icons/fa";
+import { FiDatabase } from "react-icons/fi";
+import { GiMove } from "react-icons/gi";
+import { MdLogout } from "react-icons/md";
+import { TbFileTypeSql } from "react-icons/tb";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import logo from "../assets/img/logoWhite.png";
@@ -131,7 +129,7 @@ export default function Layouts() {
                 onClick={updateActive}
                 className={`nav_link ${pathname === "/databases" && "active"}`}
               >
-                <FontAwesomeIcon icon={faTableList} />
+                <FiDatabase style={{ fontSize: "20px" }} />
                 <span className="nav_name">Databases</span>
               </Link>
 
@@ -141,41 +139,37 @@ export default function Layouts() {
                 onClick={updateActive}
                 className={`nav_link ${pathname === "/designer" && "active"}`}
               >
-                <FontAwesomeIcon icon={faTableList} />
+                <GiMove style={{ fontSize: "22px" }} />
                 <span className="nav_name">Designer</span>
               </Link>
 
-
-              {userData && userData.role === "admin" && (
-                <>
-                  <Link
-                    to="/users"
-                    onClick={updateActive}
-                    key="users"
-                    className={`nav_link ${pathname === "/users" && "active"}`}
-                  >
-                    <FontAwesomeIcon icon={faUser} />
-                    <span className="nav_name">Users</span>
-                  </Link>
-                </>
-              )}
+              <Link
+                to="/sql"
+                key="sql"
+                onClick={updateActive}
+                className={`nav_link ${pathname === "/sql" && "active"}`}
+              >
+                <TbFileTypeSql style={{ fontSize: "22px" }} />
+                <span className="nav_name">Sql</span>
+              </Link>
 
               <Link
+                to="/info"
+                key="info"
                 onClick={updateActive}
-                to="/profile"
-                key="profile"
-                className={`nav_link ${pathname === "/profile" && "active"}`}
+                className={`nav_link ${pathname === "/info" && "active"}`}
               >
-                <FontAwesomeIcon icon={faGear} />
-                <span className="nav_name">Profile</span>
+                <FaInfoCircle style={{ fontSize: "20px" }} />
+                <span className="nav_name">Info</span>
               </Link>
+
               <Link
                 onClick={logoutHandle}
                 key="logout"
                 to="#"
                 className={`nav_link `}
               >
-                <FontAwesomeIcon icon={faFileInvoice} />
+                <MdLogout style={{ fontSize: "22px" }} />
                 <span className="nav_name">Logout</span>
               </Link>
             </div>
@@ -184,7 +178,6 @@ export default function Layouts() {
               data-bs-toggle="dropdown"
             >
               <span className="header_img">
-                {" "}
                 <img
                   src={`${process.env.REACT_APP_API_BASE_URL}/api/user/img/${
                     userData && userData.photo
@@ -229,6 +222,7 @@ export default function Layouts() {
                   <div className="sidebarHeaderContainer">
                     <a
                       href="#"
+                      alt="db logo"
                       className="sidebarHeader"
                       style={{
                         justifyContent: headerToggle ? "center" : "left",
@@ -249,10 +243,7 @@ export default function Layouts() {
                       <FontAwesomeIcon icon={faX} style={{ color: "white" }} />
                     </p>
                   </div>
-                  <a href="#" className="nav_logo">
-                    <i className="bx bx-layer nav_logo-icon"></i>{" "}
-                    <span className="nav_logo-name">Database Designer</span>{" "}
-                  </a>
+
                   <div className="nav_list">
                     <Link
                       onClick={updateActive}
@@ -265,52 +256,52 @@ export default function Layouts() {
                     </Link>
 
                     <Link
-                      to="/demos"
-                      key="demos"
+                      to="/databases"
+                      key="databases"
                       onClick={updateActive}
                       className={`nav_link ${
-                        pathname === "/demos" && "active"
+                        pathname === "/databases" && "active"
                       }`}
                     >
-                      <FontAwesomeIcon icon={faTableList} />
-                      <span className="nav_name">Info</span>
+                      <FiDatabase style={{ fontSize: "20px" }} />
                     </Link>
-
-                    {userData && userData.role === "admin" && (
-                      <>
-                        <Link
-                          to="/users"
-                          onClick={updateActive}
-                          key="users"
-                          className={`nav_link ${
-                            pathname === "/users" && "active"
-                          }`}
-                        >
-                          <FontAwesomeIcon icon={faUser} />
-                          <span className="nav_name">Users</span>
-                        </Link>
-                      </>
-                    )}
 
                     <Link
+                      to="/designer"
+                      key="designer"
                       onClick={updateActive}
-                      to="/profile"
-                      key="profile"
                       className={`nav_link ${
-                        pathname === "/profile" && "active"
+                        pathname === "/designer" && "active"
                       }`}
                     >
-                      <FontAwesomeIcon icon={faGear} />
-                      <span className="nav_name">Profile</span>
+                      <GiMove style={{ fontSize: "22px" }} />
                     </Link>
+
+                    <Link
+                      to="/sql"
+                      key="sql"
+                      onClick={updateActive}
+                      className={`nav_link ${pathname === "/sql" && "active"}`}
+                    >
+                      <TbFileTypeSql style={{ fontSize: "22px" }} />
+                    </Link>
+
+                    <Link
+                      to="/info"
+                      key="info"
+                      onClick={updateActive}
+                      className={`nav_link ${pathname === "/info" && "active"}`}
+                    >
+                      <FaInfoCircle style={{ fontSize: "20px" }} />
+                    </Link>
+
                     <Link
                       onClick={logoutHandle}
                       key="logout"
                       to="#"
                       className={`nav_link `}
                     >
-                      <FontAwesomeIcon icon={faFileInvoice} />
-                      <span className="nav_name">Logout</span>
+                      <MdLogout style={{ fontSize: "22px" }} />
                     </Link>
                   </div>
                 </div>
