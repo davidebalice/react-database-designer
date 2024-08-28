@@ -1,9 +1,20 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDrop } from "react-dnd";
-import Table from "./Table";
 import Line from "./Line";
+import Table from "./Table";
 
-const Canvas = ({ tables, moveTable, addLink, links, setLinks, containerRef, setShowModal, setSelectedTable }) => {
+const Canvas = ({
+  tables,
+  moveTable,
+  addLink,
+  links,
+  setLinks,
+  containerRef,
+  setShowModal,
+  setShowDeleteModal,
+  setShowLinksModal,
+  setSelectedTable,
+}) => {
   const tableRefs = useRef({});
   const [lineData, setLineData] = useState(links);
   const [fieldDrop, setFieldDrop] = useState("");
@@ -26,8 +37,12 @@ const Canvas = ({ tables, moveTable, addLink, links, setLinks, containerRef, set
 
   const updateLineData = () => {
     const updatedLines = links.map((link) => {
-      const sourceFieldPos = getFieldPosition(`${link.sourceTable}-${link.sourceField}`);
-      const targetFieldPos = getFieldPosition(`${link.targetTable}-${link.targetField}`);
+      const sourceFieldPos = getFieldPosition(
+        `${link.sourceTable}-${link.sourceField}`
+      );
+      const targetFieldPos = getFieldPosition(
+        `${link.targetTable}-${link.targetField}`
+      );
       return {
         ...link,
         sourcePosition: sourceFieldPos,
@@ -79,13 +94,17 @@ const Canvas = ({ tables, moveTable, addLink, links, setLinks, containerRef, set
     targetField
   ) => {
     addLink(sourceTable, sourceField, targetTable, targetField);
-    updateLineData(); 
+    updateLineData();
   };
 
   return (
     <div ref={drop} className="canvas">
       {renderLines()}
-
+      <p className="infoDrag">
+        Move tables around canvas with drag and drop.
+        <br />
+        Drag fields from one table to another to create link between fields.
+      </p>
       {tables.map((table) => (
         <Table
           ref={(el) => (tableRefs.current[table.name] = el)}
@@ -104,6 +123,8 @@ const Canvas = ({ tables, moveTable, addLink, links, setLinks, containerRef, set
           targetFieldDrop={targetFieldDrop}
           setTargetFieldDrop={setTargetFieldDrop}
           setShowModal={setShowModal}
+          setShowDeleteModal={setShowDeleteModal}
+          setShowLinksModal={setShowLinksModal}
           setSelectedTable={setSelectedTable}
         />
       ))}

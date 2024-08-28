@@ -15,11 +15,10 @@ const Info = () => {
   return (
     <>
       <div className="page">
-        <Breadcrumb title={title} brad={brad} />
         <div className="card">
           <div className="card-body formContainer">
             <div className="row p-4">
-              <b style={{ padding: 0 }}>Database diagram designer</b>
+              <b style={{ padding: 0,fontSize:"20px" }}>Database diagram designer</b>
               developed in React and Node.
               <br /> <br />
               In this demo you can create a database, with tables and fields,

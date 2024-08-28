@@ -8,6 +8,7 @@ const Line = ({
   containerRef,
 }) => {
   const [offsets, setOffsets] = useState({ top: 0, left: 0 });
+  const layoutCompensation = 60;
 
   useEffect(() => {
     const calculateOffsets = () => {
@@ -30,13 +31,11 @@ const Line = ({
   }, [containerRef]);
 
   const startX = start.x - offsets.x;
-  const startY = start.y - offsets.y - 16;
+  const startY = start.y - offsets.y - layoutCompensation;
   const endX = end.x - offsets.x;
-  const endY = end.y - offsets.y - 16;
+  const endY = end.y - offsets.y - layoutCompensation;
 
-  // Assicurati che il punto medio sia sempre a sinistra del punto di partenza
-  const midX = Math.min(startX - 50, endX); 
-  const midY = startY + (endY - startY) / 2;
+  const midX = Math.min(startX - 50, endX);
 
   return (
     <svg
@@ -50,6 +49,7 @@ const Line = ({
         zIndex: 100,
       }}
       className="line-svg"
+      onDoubleClick={() => alert("34254343425")}
     >
       {startX && startY && (
         <>

@@ -95,20 +95,9 @@ const Databases = () => {
     });
   };
 
-  const title = "Databases";
-
-  const brad = [
-    {
-      name: "home",
-    },
-    {
-      name: title,
-    },
-  ];
   return (
     <>
       <div className="page">
-        <Breadcrumb title={title} brad={brad} />
 
         {loading ? (
           <>
@@ -118,7 +107,7 @@ const Databases = () => {
           <>
             <div className="row">
               <Link to={`/database/add`}>
-                <div className="addButton col-sm-4 col-md-4 col-lg-3">
+                <div className="designerButton col-sm-4 col-md-4 col-lg-3">
                   <FontAwesomeIcon
                     icon={faCirclePlus}
                     className="addButtonIcon"

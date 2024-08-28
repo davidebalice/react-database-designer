@@ -9790,7 +9790,44 @@ span.select2-container.select2-container--default.select2-container--open {
   margin-left: 10px;
 }
 
-.addButton {
+.buttonContainer {
+  width: fit-content;
+  display: flex;
+  gap: 20px;
+  flex-direction: row;
+  padding: 0px 0px;
+  justify-content: start;
+  align-items: start;
+}
+
+.selectContainer{
+  display: flex;
+  gap:14px;
+  align-items: center;
+  flex-direction: row;
+  justify-content: start;
+  border:1px solid #ccc;
+  background-color: #fff;
+  border-radius:4px;
+  height:54px;
+  padding:0px 16px;
+}
+
+.selectContainer span{
+  font-size:14px;
+  margin:0
+}
+
+.selectContainer select{
+  font-size:16px;
+  border-radius: 4px;
+  padding:4px;
+  border:1px solid #ccc;
+  min-width: 200px;
+  background-color: #f1f1f1;
+}
+
+.designerButton {
   display: flex;
   flex-direction: row;
   background: var(--main-bg-color);
@@ -9802,6 +9839,7 @@ span.select2-container.select2-container--default.select2-container--open {
   min-height: 40px;
   max-height: 54px;
   border-radius: 4px;
+  border:none;
   padding: 14px;
   margin-bottom: 20px;
   cursor: pointer;
@@ -9810,15 +9848,15 @@ span.select2-container.select2-container--default.select2-container--open {
   transition: all 0.3s ease;
 }
 
-.addButton:hover {
+.designerButton:hover {
   background: var(--main-bg-color-hover);
 }
 
-.addButtonIcon {
+.designerButtonIcon {
   font-size: 25px;
 }
 
-.addButtonSm {
+.designerButtonSm {
   display: flex;
   flex-direction: row;
   background: var(--main-bg-color) !important;
@@ -9839,11 +9877,11 @@ span.select2-container.select2-container--default.select2-container--open {
   transition: all 0.3s ease;
 }
 
-.addButtonSm:hover {
+.designerButtonSm:hover {
   background: var(--main-bg-color-hover);
 }
 
-.addButtonSmIcon {
+.designerButtonSmIcon {
   font-size: 20px;
 }
 
@@ -10723,6 +10761,11 @@ label {
   background: none;
 }
 
+.tableHeaderButtons{
+  display: flex;
+  gap:10px
+}
+
 .field {
   padding: 5px;
   border: 1px solid #ddd;
@@ -10909,6 +10952,33 @@ label {
   border-radius: 4px;
 }
 
+.modal-confirm{
+  text-align: center;
+  padding:30px;
+  font-size: 18px;
+}
+
+.modal-confirm-buttons{
+  display: flex;
+  align-items: center;
+  gap:10px;
+  justify-content: center;
+  margin-top:60px
+}
+
+.modal-confirm-button{
+ width:150px;
+ background-color: var(--main-bg-color);
+ color:#fff;
+ padding:8px;
+ border-radius:4px;
+ cursor:pointer
+}
+
+.modal-confirm-button:hover{
+  background-color: var(--main-bg-color-hover);
+}
+
 .field-row {
   display: flex;
   flex-direction: row;
@@ -10969,6 +11039,42 @@ label {
   text-align: right;
 }
 
+.link-row {
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  padding: 4px 6px;
+}
+
+.link-row:nth-child(even) {
+  background-color: #f0f0f0;
+}
+
+.link-row:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+.link-row > div:nth-child(1) {
+  width: 180px;
+}
+
+.link-row > div:nth-child(2) {
+  width: 180px;
+}
+
+.link-row > div:nth-child(3) {
+  width: 180px;
+}
+
+.link-row > div:nth-child(4) {
+  width: 180px;
+}
+
+.link-row > div:nth-child(11) {
+  width: 50px;
+  text-align: right;
+}
+
 .field-header {
   font-size: 13px;
   border-bottom: 1px solid #ddd;
@@ -11010,6 +11116,24 @@ label {
   color: #fff;
   text-align: center;
   border-radius: 4px;
+}
+
+.sqlContainer{
+    background: #f5f5f5;
+    padding: 30px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    max-height: 400px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    margin-top: 30px;
+}
+
+.infoDrag{
+  position: absolute;
+  padding:10px;
+  font-size: 14px;
 }
 
 /*# sourceMappingURL=style.css.map */

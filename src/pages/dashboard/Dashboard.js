@@ -87,12 +87,12 @@ export default function Dashboard() {
                         </div>
                         <p className="githubTitle">Frontend</p>
                         <a
-                          href="https://github.com/davidebalice/task-manager-frontend-react"
+                          href="https://github.com/davidebalice/react-database-designer"
                           target="_blank"
                           className="githubLink"
                           rel="noreferrer"
                         >
-                          github.com/davidebalice/task-manager-frontend-react
+                          github.com/davidebalice/react-database-designer
                         </a>
                       </div>
                     </div>
@@ -113,12 +113,12 @@ export default function Dashboard() {
                         </div>
                         <p className="githubTitle">Backend</p>
                         <a
-                          href="https://github.com/davidebalice/node-task-manager-api"
+                          href="https://github.com/davidebalice/node-database-designer-api"
                           target="_blank"
                           className="githubLink"
                           rel="noreferrer"
                         >
-                          github.com/davidebalice/node-task-manager-api
+                          github.com/davidebalice/node-database-designer-api
                         </a>
                       </div>
                     </div>

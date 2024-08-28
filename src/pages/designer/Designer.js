@@ -2,9 +2,13 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { FaSave } from "react-icons/fa";
+import { IoMdAddCircle } from "react-icons/io";
 import { useNavigate, useParams } from "react-router-dom";
 import "../../App.css";
 import Canvas from "./Canvas";
+import DeleteModal from "./DeleteModal";
+import LinksModal from "./LinksModal";
 import Modal from "./Modal";
 
 const Designer = () => {
@@ -17,6 +21,8 @@ const Designer = () => {
   const [tables, setTables] = useState([]);
   const [links, setLinks] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showLinksModal, setShowLinksModal] = useState(false);
   const [selectedTable, setSelectedTable] = useState(0);
   const [reload, setReload] = useState(0);
   const [databases, setDatabases] = useState([]);
@@ -40,7 +46,6 @@ const Designer = () => {
         );
         setDatabases(response.data.databases);
         if (id === 0 && response.data.databases.length > 0) {
-          console.log(response.data.databases[0].id);
           setSelectedDatabase(response.data.databases[0].id);
         }
       } catch (error) {
@@ -56,7 +61,9 @@ const Designer = () => {
       try {
         const token = getAuthToken();
         const response = await axios.get(
-          process.env.REACT_APP_API_BASE_URL + "tables?database_id=" + selectedDatabase,
+          process.env.REACT_APP_API_BASE_URL +
+            "tables?database_id=" +
+            selectedDatabase,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -88,7 +95,7 @@ const Designer = () => {
       const token = getAuthToken();
       const response = await axios.post(
         process.env.REACT_APP_API_BASE_URL + "update-tables",
-        { tables: tables, links: links, id: id },
+        { tables: tables, links: links, id: selectedDatabase },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -96,6 +103,7 @@ const Designer = () => {
           },
         }
       );
+      setReload((prevReload) => prevReload + 1);
       console.log("Response:", response);
     } catch (error) {
       console.error("Error updating tables:", error);
@@ -104,8 +112,20 @@ const Designer = () => {
 
   const addTable = () => {
     const newTable = {
+      id: 0,
       name: `Table ${tables.length + 1}`,
-      fields: ["id"],
+      fields: [
+        {
+          id: 0,
+          name: "Id",
+          field_type: "int",
+          index_field: 0,
+          lenght: 11,
+          default_value: "NULL",
+          primary_field: 1,
+          nullable: 0,
+        },
+      ],
       position: { x: 100, y: 100 },
     };
     setTables([...tables, newTable]);
@@ -131,6 +151,16 @@ const Designer = () => {
     setReload((prevReload) => prevReload + 1);
   };
 
+  const handleCloseDeleteModal = () => {
+    setShowDeleteModal(false);
+    setReload((prevReload) => prevReload + 1);
+  };
+
+  const handleCloseLinksModal = () => {
+    setShowLinksModal(false);
+    setReload((prevReload) => prevReload + 1);
+  };
+
   const handleDatabaseChange = (e) => {
     const newDatabaseId = e.target.value;
     setSelectedDatabase(newDatabaseId);
@@ -144,18 +174,46 @@ const Designer = () => {
         handleClose={handleCloseModal}
         selectedTable={selectedTable}
       />
+      <DeleteModal
+        show={showDeleteModal}
+        handleClose={handleCloseDeleteModal}
+        selectedTable={selectedTable}
+      />
+      <LinksModal
+        show={showLinksModal}
+        handleClose={handleCloseLinksModal}
+        selectedTable={selectedTable}
+        links={links}
+        setLinks={setLinks}
+      />
       <DndProvider backend={HTML5Backend}>
         <div className="page">
           <div ref={containerRef}>
-            <button onClick={() => addTable()}>Add Table</button>
-            <button onClick={() => updateTables()}>Save</button>
-            <select value={selectedDatabase} onChange={handleDatabaseChange}>
-              {databases.map((db) => (
-                <option key={db.id} value={db.id}>
-                  {db.name}
-                </option>
-              ))}
-            </select>
+            <div className="buttonContainer">
+              <button className="designerButton" onClick={() => addTable()}>
+                <IoMdAddCircle />
+                Add Table
+              </button>
+              <button className="designerButton" onClick={() => updateTables()}>
+                <FaSave />
+                Save
+              </button>
+
+              <div className="selectContainer">
+                <span>Database</span>
+                <select
+                  value={selectedDatabase}
+                  onChange={handleDatabaseChange}
+                >
+                  {databases.map((db) => (
+                    <option key={db.id} value={db.id}>
+                      {db.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
             <Canvas
               tables={tables}
               moveTable={moveTable}
@@ -164,6 +222,8 @@ const Designer = () => {
               setLinks={setLinks}
               containerRef={containerRef}
               setShowModal={setShowModal}
+              setShowDeleteModal={setShowDeleteModal}
+              setShowLinksModal={setShowLinksModal}
               setSelectedTable={setSelectedTable}
             />
           </div>

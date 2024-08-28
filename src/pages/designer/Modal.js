@@ -138,9 +138,7 @@ const Modal = ({ show, handleClose, selectedTable }) => {
 
   const handleCheckboxChange = (e, fieldId) => {
     const { name, checked } = e.target;
-    console.log("checked");
-    console.log(name);
-    console.log(checked);
+
     setTableData((prevData) => ({
       ...prevData,
       fields: prevData.fields.map((field) =>
@@ -244,7 +242,7 @@ const Modal = ({ show, handleClose, selectedTable }) => {
                 <div>type</div>
                 <div>lenght</div>
                 <div>default</div>
-                <div>pri</div>
+                <div>pk</div>
                 <div>ai</div>
                 <div>null</div>
                 <div>index</div>
@@ -449,7 +447,7 @@ const Modal = ({ show, handleClose, selectedTable }) => {
               </div>
             </>
           ) : (
-            <p>Fileds not found</p>
+            <p>Fields not found</p>
           )}
         </div>
       </div>

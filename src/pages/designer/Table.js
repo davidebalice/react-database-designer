@@ -1,8 +1,10 @@
-import { faGear } from "@fortawesome/free-solid-svg-icons";
+import { faGear, faLink, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import Field from "./Field";
+
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 const Table = ({
   id,
@@ -22,6 +24,8 @@ const Table = ({
   targetFieldDrop,
   setTargetFieldDrop,
   setShowModal,
+  setShowDeleteModal,
+  setShowLinksModal,
   setSelectedTable,
 }) => {
   const [selectedField, setSelectedField] = useState("");
@@ -41,9 +45,6 @@ const Table = ({
       }
     },
   });
-
-  console.log("links");
-  console.log(links);
 
   const [{ isOver }, drop] = useDrop(
     () => ({
@@ -70,13 +71,10 @@ const Table = ({
   const handleFieldDrop = useCallback(
     (field, type, monitor) => {
       if (type === "drop") {
-        // Usa field.name invece di field direttamente
-        console.log(field);
         const targetTableObj = tables.find((t) =>
           t.fields.some((f) => f.name === field)
         );
         if (targetTableObj) {
-          console.log(field.name);
           setFieldDrop(field);
         }
       } else {
@@ -137,7 +135,29 @@ const Table = ({
   const onOpenModal = (id) => {
     setSelectedTable(id);
     setShowModal(true);
+    setShowLinksModal(false);
+    setShowDeleteModal(false);
   };
+
+  const onOpenModalLink = (id) => {
+    setSelectedTable(id);
+    setShowLinksModal(true);
+    setShowModal(false);
+    setShowDeleteModal(false);
+  };
+
+  const onOpenDeleteModal = (id) => {
+    setSelectedTable(id);
+    setShowDeleteModal(true);
+    setShowModal(false);
+    setShowLinksModal(false);
+  };
+
+  const renderTooltip = (text) => (
+    <Tooltip id="button-tooltip" style={{ marginBottom: "10px" }}>
+      {text}
+    </Tooltip>
+  );
 
   return (
     <>
@@ -152,17 +172,52 @@ const Table = ({
         <div>
           <div className="tableHeader">
             <span>{name}</span>
-            <div>
-              {id > 0 && (
-                <FontAwesomeIcon
-                  icon={faGear}
-                  className="gear"
-                  onClick={() => {
-                    onOpenModal(id);
-                  }}
-                />
-              )}
-            </div>
+
+            {id > 0 && (
+              <div className="tableHeaderButtons">
+                <OverlayTrigger
+                  placement="top"
+                  delay={{ show: 200, hide: 200 }}
+                  overlay={renderTooltip("Manage table and fields")}
+                >
+                  <FontAwesomeIcon
+                    icon={faGear}
+                    className="gear"
+                    onClick={() => {
+                      onOpenModal(id);
+                    }}
+                  />
+                </OverlayTrigger>
+
+                <OverlayTrigger
+                  placement="top"
+                  delay={{ show: 200, hide: 200 }}
+                  overlay={renderTooltip("Links")}
+                >
+                  <FontAwesomeIcon
+                    icon={faLink}
+                    className="gear"
+                    onClick={() => {
+                      onOpenModalLink(id);
+                    }}
+                  />
+                </OverlayTrigger>
+
+                <OverlayTrigger
+                  placement="top"
+                  delay={{ show: 200, hide: 200 }}
+                  overlay={renderTooltip("Delete table")}
+                >
+                  <FontAwesomeIcon
+                    icon={faTrash}
+                    className="gear"
+                    onClick={() => {
+                      onOpenDeleteModal(id);
+                    }}
+                  />
+                </OverlayTrigger>
+              </div>
+            )}
           </div>
           <ul>
             {showLink && (
@@ -178,6 +233,7 @@ const Table = ({
                     </option>
                   ))}
                 </select>
+
                 <select
                   onChange={(e) => setTargetTable(e.target.value)}
                   value={targetTable}
@@ -191,6 +247,7 @@ const Table = ({
                       </option>
                     ))}
                 </select>
+                
                 {targetTable && (
                   <select
                     onChange={(e) => setTargetField(e.target.value)}

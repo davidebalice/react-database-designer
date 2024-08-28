@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { IoCopyOutline } from "react-icons/io5";
 import { useNavigate, useParams } from "react-router-dom";
 
 const Sql = () => {
@@ -10,7 +11,7 @@ const Sql = () => {
   const [tables, setTables] = useState([]);
   const [links, setLinks] = useState([]);
   const [sql, setSql] = useState("");
-  const [copyButtonText, setCopyButtonText] = useState("Copy");
+  const [copyButtonText, setCopyButtonText] = useState("Copy Sql");
   const [selectedCharset, setSelectedCharset] = useState("utf8mb4");
   const [selectedEngine, setSelectedEngine] = useState("InnoDB");
   const [databases, setDatabases] = useState([]);
@@ -110,45 +111,6 @@ const Sql = () => {
         }
       });
 
-      /*
-CREATE TABLE `database_designer_link` (
-  `id` int(11) NOT NULL,
-  `database_id` int(11) NOT NULL DEFAULT 0,
-  `sourceTable` varchar(255) NOT NULL,
-  `sourceField` varchar(255) NOT NULL,
-  `targetTable` varchar(255) NOT NULL,
-  `targetField` varchar(255) NOT NULL,
-  `createdAt` datetime DEFAULT NULL,
-  `updatedAt` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-
-
-CREATE TABLE `api1_failed_jobs` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `uuid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `failed_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Struttura della tabella `api1_migrations`
---
-
-CREATE TABLE `api1_migrations` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `batch` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-
-*/
-
       setSql(sqlStr);
     };
 
@@ -177,74 +139,53 @@ CREATE TABLE `api1_migrations` (
 
   return (
     <div className="page">
-      <h4 className="mb-3">Generated SQL</h4>
-
       <div style={{ marginBottom: "1rem" }}>
-        <label>
-          Select Charset:
-          <select
-            value={selectedCharset}
-            onChange={(e) => setSelectedCharset(e.target.value)}
-            style={{ marginLeft: "10px" }}
-          >
-            <option value="utf8mb4">utf8mb4</option>
-            <option value="utf8">utf8</option>
-            <option value="latin1">latin1</option>
-          </select>
-        </label>
+        <div className="buttonContainer">
+          <div className="selectContainer">
+            <span>Charset</span>
+            <select
+              value={selectedCharset}
+              onChange={(e) => setSelectedCharset(e.target.value)}
+              style={{ marginLeft: "10px" }}
+            >
+              <option value="utf8mb4">utf8mb4</option>
+              <option value="utf8">utf8</option>
+              <option value="latin1">latin1</option>
+            </select>
+          </div>
+
+          <div className="selectContainer">
+            <span>Engine</span>
+            <select
+              value={selectedEngine}
+              onChange={(e) => setSelectedEngine(e.target.value)}
+              style={{ marginLeft: "10px" }}
+            >
+              <option value="InnoDB">InnoDB</option>
+              <option value="MyISAM">MyISAM</option>
+              <option value="MEMORY">MEMORY</option>
+            </select>
+          </div>
+
+          <div className="selectContainer">
+            <span>Database</span>
+            <select value={selectedDatabase} onChange={handleDatabaseChange}>
+              {databases.map((db) => (
+                <option key={db.id} value={db.id}>
+                  {db.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <button onClick={copyToClipboard} className="designerButton">
+            <IoCopyOutline />
+            {copyButtonText}
+          </button>
+        </div>
+
+        <pre className="sqlContainer">{sql}</pre>
       </div>
-
-      <div style={{ marginBottom: "1rem" }}>
-        <label>
-          Select Engine:
-          <select
-            value={selectedEngine}
-            onChange={(e) => setSelectedEngine(e.target.value)}
-            style={{ marginLeft: "10px" }}
-          >
-            <option value="InnoDB">InnoDB</option>
-            <option value="MyISAM">MyISAM</option>
-            <option value="MEMORY">MEMORY</option>
-          </select>
-        </label>
-      </div>
-
-      <select value={selectedDatabase} onChange={handleDatabaseChange}>
-        {databases.map((db) => (
-          <option key={db.id} value={db.id}>
-            {db.name}
-          </option>
-        ))}
-      </select>
-
-      <pre
-        style={{
-          backgroundColor: "#f5f5f5",
-          padding: "10px",
-          borderRadius: "5px",
-          border: "1px solid #ddd",
-          maxHeight: "400px",
-          overflowY: "auto",
-          whiteSpace: "pre-wrap",
-          wordWrap: "break-word",
-        }}
-      >
-        <button
-          onClick={copyToClipboard}
-          style={{
-            position: "absolute",
-            marginTop: "10px",
-            right: "20px",
-            padding: "5px 10px",
-            fontSize: "12px",
-            cursor: "pointer",
-          }}
-        >
-          {copyButtonText}
-        </button>
-
-        {sql}
-      </pre>
     </div>
   );
 };
