@@ -14,6 +14,7 @@ const Sql = () => {
   const [copyButtonText, setCopyButtonText] = useState("Copy Sql");
   const [selectedCharset, setSelectedCharset] = useState("utf8mb4");
   const [selectedEngine, setSelectedEngine] = useState("InnoDB");
+  const [prefix, setPrefix] = useState("db_");
   const [databases, setDatabases] = useState([]);
   const [selectedDatabase, setSelectedDatabase] = useState(id);
 
@@ -78,7 +79,7 @@ const Sql = () => {
         const tableFields = table.fields.filter(
           (field) => field.table_id === table.id
         );
-        sqlStr += `CREATE TABLE \`${table.name}\` (\n`;
+        sqlStr += `CREATE TABLE \`${prefix}${table.name}\` (\n`;
         sqlStr += tableFields
           .map((field) => {
             let fieldSql = `  \`${field.name}\` ${field.field_type}`;
@@ -91,23 +92,25 @@ const Sql = () => {
           })
           .join(",\n");
         sqlStr += `\n) ENGINE=${selectedEngine} DEFAULT CHARSET=${selectedCharset};\n\n`;
+
+        tableFields.forEach((field) => {
+          if (field.index_field === 1) {
+            sqlStr += `ALTER TABLE \`${prefix}${table.name}\` ADD INDEX \`idx_${prefix}${table.name}_${field.name}\` (\`${field.name}\`);\n`;
+          }
+        });
+        sqlStr += "\n";
       });
 
       links.forEach((link) => {
-        console.log(link.sourceTable);
-        console.log(link.targetTable);
-        console.log(tables);
         const fromTable = tables.find(
           (table) => table.name === link.sourceTable
         );
         const toTable = tables.find((table) => table.name === link.targetTable);
 
-        console.log("fromTable");
-        console.log(fromTable);
         if (fromTable && toTable) {
-          sqlStr += `ALTER TABLE \`${fromTable.name}\` \n`;
-          sqlStr += `  ADD CONSTRAINT fk_${fromTable.name}_${toTable.name}\n`;
-          sqlStr += `  FOREIGN KEY (${link.sourceField}) REFERENCES ${toTable.name}(${link.targetField});\n\n`;
+          sqlStr += `ALTER TABLE \`${prefix}${fromTable.name}\` \n`;
+          sqlStr += `  ADD CONSTRAINT \`fk_${prefix}${fromTable.name}_${prefix}${toTable.name}\` \n`;
+          sqlStr += `  FOREIGN KEY (${link.sourceField}) REFERENCES ${prefix}${toTable.name}(${link.targetField});\n\n`;
         }
       });
 
@@ -117,7 +120,7 @@ const Sql = () => {
     if (tables.length) {
       generateSQL();
     }
-  }, [tables, links]);
+  }, [tables, links, selectedCharset, selectedEngine, prefix]);
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(sql).then(
@@ -135,6 +138,10 @@ const Sql = () => {
     const newDatabaseId = e.target.value;
     setSelectedDatabase(newDatabaseId);
     navigate(`/sql/${newDatabaseId}`);
+  };
+
+  const onChangePrefix = (event) => {
+    setPrefix(event.target.value);
   };
 
   return (
@@ -176,6 +183,11 @@ const Sql = () => {
                 </option>
               ))}
             </select>
+          </div>
+
+          <div className="selectContainer">
+            <span>Tables prefix</span>
+            <input type="text" value={prefix} onChange={onChangePrefix} />
           </div>
 
           <button onClick={copyToClipboard} className="designerButton">

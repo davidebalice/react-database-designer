@@ -10716,7 +10716,9 @@ label {
   position: relative;
   width: 100%;
   height: 100vh;
-  border: 1px solid black;
+  border: 1px solid #ccc;
+  background: #fff;
+  border-radius: 4px;
 }
 
 .table {
@@ -11123,11 +11125,11 @@ label {
     padding: 30px;
     border-radius: 5px;
     border: 1px solid #ddd;
-    max-height: 400px;
+    min-height: calc(100vh - 383px);
     overflow-y: auto;
     white-space: pre-wrap;
     word-wrap: break-word;
-    margin-top: 30px;
+    margin-top: 10px;
 }
 
 .infoDrag{
