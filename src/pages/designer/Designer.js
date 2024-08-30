@@ -10,6 +10,7 @@ import Canvas from "./Canvas";
 import DeleteModal from "./DeleteModal";
 import LinksModal from "./LinksModal";
 import Modal from "./Modal";
+import DemoModal from "./DemoModal";
 
 const Designer = () => {
   let { id } = useParams();
@@ -23,6 +24,7 @@ const Designer = () => {
   const [showModal, setShowModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showLinksModal, setShowLinksModal] = useState(false);
+  const [showDemoModal, setShowDemoModal] = useState(false);
   const [selectedTable, setSelectedTable] = useState(0);
   const [reload, setReload] = useState(0);
   const [databases, setDatabases] = useState([]);
@@ -104,6 +106,9 @@ const Designer = () => {
         }
       );
       setReload((prevReload) => prevReload + 1);
+      if(response.data.status==="demo"){
+        setShowDemoModal(true);
+      }
       console.log("Response:", response);
     } catch (error) {
       console.error("Error updating tables:", error);
@@ -117,12 +122,13 @@ const Designer = () => {
       fields: [
         {
           id: 0,
-          name: "Id",
+          name: "id",
           field_type: "int",
           index_field: 0,
           lenght: 11,
           default_value: "NULL",
           primary_field: 1,
+          ai: 1,
           nullable: 0,
         },
       ],
@@ -149,6 +155,10 @@ const Designer = () => {
   const handleCloseModal = () => {
     setShowModal(false);
     setReload((prevReload) => prevReload + 1);
+  };
+
+  const handleDemoClose = () => {
+    setShowDemoModal(false);
   };
 
   const handleCloseDeleteModal = () => {
@@ -185,6 +195,10 @@ const Designer = () => {
         selectedTable={selectedTable}
         links={links}
         setLinks={setLinks}
+      />
+      <DemoModal
+        show={showDemoModal}
+        handleDemoClose={handleDemoClose}
       />
       <DndProvider backend={HTML5Backend}>
         <div className="page">

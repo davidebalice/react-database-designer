@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 
 const Line = ({
+  index,
   start,
   end,
   color = "black",
   strokeWidth = 2,
   containerRef,
+  opacity = 0.5,
 }) => {
   const [offsets, setOffsets] = useState({ top: 0, left: 0 });
   const layoutCompensation = 60;
@@ -30,26 +32,16 @@ const Line = ({
     return () => window.removeEventListener("resize", calculateOffsets);
   }, [containerRef]);
 
-  const startX = start.x - offsets.x;
+  const startX = start.x - offsets.x + (index+4);
   const startY = start.y - offsets.y - layoutCompensation;
-  const endX = end.x - offsets.x;
+  const endX = end.x - offsets.x + (index+4);
   const endY = end.y - offsets.y - layoutCompensation;
 
   const midX = Math.min(startX - 50, endX);
 
   return (
     <svg
-      style={{
-        position: "absolute",
-        left: 0,
-        top: 0,
-        width: "100%",
-        height: "100%",
-        pointerEvents: "none",
-        zIndex: 100,
-      }}
       className="line-svg"
-      onDoubleClick={() => alert("34254343425")}
     >
       {startX && startY && (
         <>
@@ -61,6 +53,7 @@ const Line = ({
             strokeLinecap="round"
             style={{
               pointerEvents: "none",
+              opacity: opacity,
             }}
           />
           <circle cx={startX} cy={startY} r={4} fill={color} stroke="none" />

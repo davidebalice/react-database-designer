@@ -15,6 +15,7 @@ import { MdDateRange } from "react-icons/md";
 import { PiTextTBold } from "react-icons/pi";
 
 const Modal = ({ show, handleClose, selectedTable }) => {
+  const [demo, setDemo] = useState(false);
   const [tableData, setTableData] = useState(null);
   const [modTitle, setModTitle] = useState(false);
   const [modField, setModField] = useState("");
@@ -80,7 +81,7 @@ const Modal = ({ show, handleClose, selectedTable }) => {
   };
 
   const handleSave = async () => {
-    console.log("Sending updated tableData:", tableData);
+    //console.log("Sending updated tableData:", tableData);
     setIsSaving(true);
 
     const sanitizedTableData = {
@@ -96,7 +97,7 @@ const Modal = ({ show, handleClose, selectedTable }) => {
 
     try {
       const token = getAuthToken();
-      await axios.post(
+      const response = await axios.post(
         `${process.env.REACT_APP_API_BASE_URL}edit/table/${tableData.id}`,
         sanitizedTableData,
         {
@@ -105,7 +106,11 @@ const Modal = ({ show, handleClose, selectedTable }) => {
           },
         }
       );
-      handleClose();
+      if (response.data.status === "demo") {
+        setDemo(true);
+      } else {
+        handleClose();
+      }
     } catch (error) {
       console.error("Error saving changes:", error);
     } finally {
@@ -158,7 +163,7 @@ const Modal = ({ show, handleClose, selectedTable }) => {
   const deleteField = async (fieldId) => {
     try {
       const token = getAuthToken();
-      await axios.post(
+      const response = await axios.post(
         `${process.env.REACT_APP_API_BASE_URL}field/delete/${fieldId}`,
         {},
         {
@@ -167,12 +172,16 @@ const Modal = ({ show, handleClose, selectedTable }) => {
           },
         }
       );
-      setTableData((prevData) => ({
-        ...prevData,
-        fields: prevData.fields.filter((field) => field.id !== fieldId),
-      }));
-      setDelField("");
-
+      if (response.data.status === "demo") {
+        setDemo(true);
+        setDelField("");
+      } else {
+        setTableData((prevData) => ({
+          ...prevData,
+          fields: prevData.fields.filter((field) => field.id !== fieldId),
+        }));
+        setDelField("");
+      }
     } catch (error) {
       console.error("Error deleting field:", error);
     }
@@ -235,216 +244,237 @@ const Modal = ({ show, handleClose, selectedTable }) => {
             <p>Loading...</p>
           ) : tableData ? (
             <>
-              <div className="field-row field-header">
-                <div>pk</div>
-                <div></div>
-                <div>name</div>
-                <div>type</div>
-                <div>lenght</div>
-                <div>default</div>
-                <div>pk</div>
-                <div>ai</div>
-                <div>null</div>
-                <div>index</div>
-                <div></div>
-              </div>
+              {demo ? (
+                <>
+                  demo <span onClick={() => setDemo(false)}>close</span>
+                </>
+              ) : (
+                <>
+                  <div className="field-row field-header">
+                    <div>pk</div>
+                    <div></div>
+                    <div>name</div>
+                    <div>type</div>
+                    <div>lenght</div>
+                    <div>default</div>
+                    <div>pk</div>
+                    <div>ai</div>
+                    <div>null</div>
+                    <div>index</div>
+                    <div></div>
+                  </div>
 
-              <div>
-                <ul className="w-100">
-                  {tableData.fields.map((field) => (
-                    <li key={field.id} className="field-row">
-                      {modField === field.id ? (
-                        <>
-                          <div></div>
-                          <div></div>
-                          <div>
-                            <input
-                              type="text"
-                              name="name"
-                              value={field.name}
-                              onChange={(e) => handleInputChange(e, field.id)}
-                              placeholder="Field Name"
-                              className="inputField"
-                            />
-                          </div>
-                          <div>
-                            <select
-                              name="field_type"
-                              value={field.field_type}
-                              onChange={(e) => handleFieldChange(e, field.id)}
-                              className="inputField"
-                            >
-                              {fieldTypes.map((type) => (
-                                <option key={type} value={type}>
-                                  {type}
-                                </option>
-                              ))}
-                            </select>
-                          </div>
-                          <div>
-                            <input
-                              type="text"
-                              name="lenght"
-                              value={field.lenght}
-                              onChange={(e) => handleInputChange(e, field.id)}
-                              placeholder="Lenght"
-                              className="inputField"
-                            />
-                          </div>
-                          <div>
-                            <input
-                              type="text"
-                              name="default_value"
-                              value={field.default_value}
-                              onChange={(e) => handleInputChange(e, field.id)}
-                              placeholder="Default value"
-                              className="inputField"
-                            />
-                          </div>
-                          <div>
-                            <input
-                              type="checkbox"
-                              name="primary_field"
-                              checked={field.primary_field === 1}
-                              className="checkboxField"
-                              onChange={(e) =>
-                                handleCheckboxChange(e, field.id)
-                              }
-                            />
-                          </div>
-                          <div>
-                            <input
-                              type="checkbox"
-                              name="ai"
-                              checked={field.ai === 1}
-                              className="checkboxField"
-                              onChange={(e) =>
-                                handleCheckboxChange(e, field.id)
-                              }
-                            />
-                          </div>
-                          <div>
-                            <input
-                              type="checkbox"
-                              name="nullable"
-                              checked={field.nullable === 1}
-                              className="checkboxField"
-                              onChange={(e) =>
-                                handleCheckboxChange(e, field.id)
-                              }
-                            />
-                          </div>
-                          <div>
-                            <input
-                              type="checkbox"
-                              name="index_field"
-                              checked={field.index_field === 1}
-                              className="checkboxField"
-                              onChange={(e) =>
-                                handleCheckboxChange(e, field.id)
-                              }
-                            />
-                          </div>
-                          <div onClick={() => setModField("")}>
-                            <FontAwesomeIcon
-                              icon={faClose}
-                              className="modal-icon2 mt-1"
-                            />
-                          </div>
-                        </>
-                      ) : (
-                        <>
-                          {delField === field.id ? (
+                  <div>
+                    <ul className="w-100">
+                      {tableData.fields.map((field) => (
+                        <li key={field.id} className="field-row">
+                          {modField === field.id ? (
                             <>
                               <div></div>
                               <div></div>
-                              <div>Confirm delete?</div>
-                              <div
-                                className="deleteButton"
-                                onClick={() => deleteField(field.id)}
-                              >
-                                ok
+                              <div>
+                                <input
+                                  type="text"
+                                  name="name"
+                                  value={field.name}
+                                  onChange={(e) =>
+                                    handleInputChange(e, field.id)
+                                  }
+                                  placeholder="Field Name"
+                                  className="inputField"
+                                />
                               </div>
-                              <div
-                                className="deleteButton"
-                                onClick={() => prevDeleteField()}
-                              >
-                                no
+                              <div>
+                                <select
+                                  name="field_type"
+                                  value={field.field_type}
+                                  onChange={(e) =>
+                                    handleFieldChange(e, field.id)
+                                  }
+                                  className="inputField"
+                                >
+                                  {fieldTypes.map((type) => (
+                                    <option key={type} value={type}>
+                                      {type}
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+                              <div>
+                                <input
+                                  type="text"
+                                  name="lenght"
+                                  value={field.lenght}
+                                  onChange={(e) =>
+                                    handleInputChange(e, field.id)
+                                  }
+                                  placeholder="Lenght"
+                                  className="inputField"
+                                />
+                              </div>
+                              <div>
+                                <input
+                                  type="text"
+                                  name="default_value"
+                                  value={field.default_value}
+                                  onChange={(e) =>
+                                    handleInputChange(e, field.id)
+                                  }
+                                  placeholder="Default value"
+                                  className="inputField"
+                                />
+                              </div>
+                              <div>
+                                <input
+                                  type="checkbox"
+                                  name="primary_field"
+                                  checked={field.primary_field === 1}
+                                  className="checkboxField"
+                                  onChange={(e) =>
+                                    handleCheckboxChange(e, field.id)
+                                  }
+                                />
+                              </div>
+                              <div>
+                                <input
+                                  type="checkbox"
+                                  name="ai"
+                                  checked={field.ai === 1}
+                                  className="checkboxField"
+                                  onChange={(e) =>
+                                    handleCheckboxChange(e, field.id)
+                                  }
+                                />
+                              </div>
+                              <div>
+                                <input
+                                  type="checkbox"
+                                  name="nullable"
+                                  checked={field.nullable === 1}
+                                  className="checkboxField"
+                                  onChange={(e) =>
+                                    handleCheckboxChange(e, field.id)
+                                  }
+                                />
+                              </div>
+                              <div>
+                                <input
+                                  type="checkbox"
+                                  name="index_field"
+                                  checked={field.index_field === 1}
+                                  className="checkboxField"
+                                  onChange={(e) =>
+                                    handleCheckboxChange(e, field.id)
+                                  }
+                                />
+                              </div>
+                              <div onClick={() => setModField("")}>
+                                <FontAwesomeIcon
+                                  icon={faClose}
+                                  className="modal-icon2 mt-1"
+                                />
                               </div>
                             </>
                           ) : (
                             <>
-                              <div className="fieldIcon">
-                                {field.primary_field === 1 ? (
-                                  <FaKey
-                                    style={{
-                                      color: "#c2b812",
-                                      fontSize: "18px",
-                                    }}
-                                  />
-                                ) : field.index_field === 1 ? (
-                                  <FaKey
-                                    style={{ color: "#999", fontSize: "18px" }}
-                                  />
-                                ) : (
-                                  ""
-                                )}
-                              </div>
-                              <div className="fieldIcon">
-                                {field.field_type === "varchar" ||
-                                field.field_type === "text" ? (
-                                  <PiTextTBold style={{ fontSize: "22px" }} />
-                                ) : field.field_type === "date" ||
-                                  field.field_type === "datetime" ? (
-                                  <MdDateRange />
-                                ) : (
-                                  <GoNumber style={{ fontSize: "22px" }} />
-                                )}
-                              </div>
-                              <div>{field.name}</div>
-                              <div>{field.field_type}</div>
-                              <div>{field.lenght}</div>
-                              <div>{field.default_value}</div>
-                              <div>
-                                {field.primary_field === 1 && (
-                                  <IoMdCheckmarkCircleOutline />
-                                )}
-                              </div>
-                              <div>
-                                {field.ai === 1 && (
-                                  <IoMdCheckmarkCircleOutline />
-                                )}
-                              </div>
-                              <div>
-                                {field.nullable === 1 && (
-                                  <IoMdCheckmarkCircleOutline />
-                                )}
-                              </div>
-                              <div>
-                                {field.index_field === 1 && (
-                                  <IoMdCheckmarkCircleOutline />
-                                )}
-                              </div>
-                              <div>
-                                <FontAwesomeIcon
-                                  icon={faPenToSquare}
-                                  className="modal-icon2"
-                                  onClick={() => setModField(field.id)}
-                                />
-                                <FontAwesomeIcon
-                                  icon={faTrash}
-                                  className="modal-icon2 trash"
-                                  onClick={() => onDeleteField(field.id)}
-                                />
-                              </div>
+                              {delField === field.id ? (
+                                <>
+                                  <div></div>
+                                  <div></div>
+                                  <div>Confirm delete?</div>
+                                  <div
+                                    className="deleteButton"
+                                    onClick={() => deleteField(field.id)}
+                                  >
+                                    ok
+                                  </div>
+                                  <div
+                                    className="deleteButton"
+                                    onClick={() => prevDeleteField()}
+                                  >
+                                    no
+                                  </div>
+                                </>
+                              ) : (
+                                <>
+                                  <div className="fieldIcon">
+                                    {field.primary_field === 1 ? (
+                                      <FaKey
+                                        style={{
+                                          color: "#c2b812",
+                                          fontSize: "18px",
+                                        }}
+                                      />
+                                    ) : field.index_field === 1 ? (
+                                      <FaKey
+                                        style={{
+                                          color: "#999",
+                                          fontSize: "18px",
+                                        }}
+                                      />
+                                    ) : (
+                                      ""
+                                    )}
+                                  </div>
+                                  <div className="fieldIcon">
+                                    {field.field_type === "varchar" ||
+                                    field.field_type === "text" ? (
+                                      <PiTextTBold
+                                        style={{ fontSize: "22px" }}
+                                      />
+                                    ) : field.field_type === "date" ||
+                                      field.field_type === "datetime" ? (
+                                      <MdDateRange />
+                                    ) : (
+                                      <GoNumber style={{ fontSize: "22px" }} />
+                                    )}
+                                  </div>
+                                  <div>{field.name}</div>
+                                  <div>{field.field_type}</div>
+                                  <div>{field.lenght}</div>
+                                  <div>{field.default_value}</div>
+                                  <div>
+                                    {field.primary_field === 1 && (
+                                      <IoMdCheckmarkCircleOutline />
+                                    )}
+                                  </div>
+                                  <div>
+                                    {field.ai === 1 && (
+                                      <IoMdCheckmarkCircleOutline />
+                                    )}
+                                  </div>
+                                  <div>
+                                    {field.nullable === 1 && (
+                                      <IoMdCheckmarkCircleOutline />
+                                    )}
+                                  </div>
+                                  <div>
+                                    {field.index_field === 1 && (
+                                      <IoMdCheckmarkCircleOutline />
+                                    )}
+                                  </div>
+                                  <div>
+                                    <FontAwesomeIcon
+                                      icon={faPenToSquare}
+                                      className="modal-icon2"
+                                      onClick={() => setModField(field.id)}
+                                    />
+                                    <FontAwesomeIcon
+                                      icon={faTrash}
+                                      className="modal-icon2 trash"
+                                      onClick={() => onDeleteField(field.id)}
+                                    />
+                                  </div>
+                                </>
+                              )}
                             </>
                           )}
-                        </>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </>
+              )}
             </>
           ) : (
             <p>Fields not found</p>

@@ -4,6 +4,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 const DeleteModal = ({ show, handleClose, selectedTable }) => {
+  const [demo, setDemo] = useState(false);
   const [tableData, setTableData] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -38,7 +39,7 @@ const DeleteModal = ({ show, handleClose, selectedTable }) => {
   const deleteTable = async () => {
     try {
       const token = getAuthToken();
-      await axios.post(
+      const response = await axios.post(
         `${process.env.REACT_APP_API_BASE_URL}table/delete/${tableData.id}`,
         {},
         {
@@ -47,7 +48,11 @@ const DeleteModal = ({ show, handleClose, selectedTable }) => {
           },
         }
       );
-      handleClose();
+      if (response.data.status === "demo") {
+        setDemo(true);
+      } else {
+        handleClose();
+      }
     } catch (error) {
       console.error("Error deleting field:", error);
     }
@@ -75,16 +80,28 @@ const DeleteModal = ({ show, handleClose, selectedTable }) => {
             <p>Loading...</p>
           ) : tableData ? (
             <>
-              <div className="modal-confirm">
-                Confirm deletation of table <b>{tableData.name}</b>, fields and
-                links?
-                <br />
-                <div className="modal-confirm-buttons">
-                  {" "}
-                  <div onClick={() => deleteTable()} className="modal-confirm-button">yes</div>
-                  <div onClick={handleClose} className="modal-confirm-button">no</div>
+              {demo ? (
+                <>
+                  demo <span onClick={() => setDemo(false)}>close</span>
+                </>
+              ) : (
+                <div className="modal-confirm">
+                  Confirm deletation of table <b>{tableData.name}</b>, fields
+                  and links?
+                  <br />
+                  <div className="modal-confirm-buttons">
+                    <div
+                      onClick={() => deleteTable()}
+                      className="modal-confirm-button"
+                    >
+                      yes
+                    </div>
+                    <div onClick={handleClose} className="modal-confirm-button">
+                      no
+                    </div>
+                  </div>
                 </div>
-              </div>
+              )}
             </>
           ) : (
             <p>Fields not found</p>

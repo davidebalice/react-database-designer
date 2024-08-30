@@ -9,10 +9,6 @@ import Databases from "../pages/databases/Databases";
 import Sql from "../pages/sql/Sql";
 import Edit from "../pages/databases/Edit";
 import Designer from "../pages/designer/Designer";
-import AddUser from "../pages/users/AddUser";
-import EditUser from "../pages/users/EditUser";
-import PhotoUser from "../pages/users/PhotoUser";
-import Users from "../pages/users/Users";
 
 export function AdminRoutes() {
   return (
@@ -30,10 +26,6 @@ export function AdminRoutes() {
         <Route path="/info" element={<Info />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/users" element={<Users />} />
-        <Route path="/add/user/" element={<AddUser />} />
-        <Route path="/edit/user/:id" element={<EditUser />} />
-        <Route path="/photo/user/:id" element={<PhotoUser />} />
       </Routes>
     </>
   );

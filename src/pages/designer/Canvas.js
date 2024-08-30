@@ -21,6 +21,7 @@ const Canvas = ({
   const [tableDrop, setTableDrop] = useState("");
   const [targetTableDrop, setTargetTableDrop] = useState("");
   const [targetFieldDrop, setTargetFieldDrop] = useState("");
+  const [incrementPixel, setIncrementPixel] = useState(-10);
 
   const [, drop] = useDrop(() => ({
     accept: "TABLE",
@@ -77,11 +78,14 @@ const Canvas = ({
       return (
         <Line
           key={index}
+          index={index}
           start={sourcePosition}
           end={targetPosition}
           color="black"
           strokeWidth={2}
           containerRef={containerRef}
+          incrementPixel={incrementPixel}
+          setIncrementPixel={setIncrementPixel}
         />
       );
     });

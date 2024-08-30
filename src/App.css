@@ -11138,6 +11138,16 @@ label {
   font-size: 14px;
 }
 
+.line-svg{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 100;
+}
+
 /*# sourceMappingURL=style.css.map */
 
 /* end  dashboard css */
