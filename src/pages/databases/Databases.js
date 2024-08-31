@@ -1,23 +1,22 @@
 import {
   faCirclePlus,
-  faNoteSticky,
   faPenToSquare,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { AiOutlineDatabase } from "react-icons/ai";
-import { PiFileSqlDuotone } from "react-icons/pi";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
-import { FaDatabase, FaDesktop, FaGithub } from "react-icons/fa";
+import { AiOutlineDatabase } from "react-icons/ai";
+import { FaDatabase } from "react-icons/fa";
+import { PiFileSqlDuotone } from "react-icons/pi";
 import { Link, useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
-import Breadcrumb from "../../components/breadcrumb";
 import Loading from "../../components/loading";
 import Pagination from "../../components/pagination/Pagination";
 import { Context } from "../../context/UserContext";
+import MobileMessage from "../../components/mobileMessage";
 
 const Databases = () => {
   const { userData, demoMode } = useContext(Context);
@@ -98,7 +97,6 @@ const Databases = () => {
   return (
     <>
       <div className="page">
-
         {loading ? (
           <>
             <Loading />
@@ -106,6 +104,7 @@ const Databases = () => {
         ) : (
           <>
             <div className="row">
+              <MobileMessage/>
               <Link to={`/database/add`}>
                 <div className="designerButton col-sm-4 col-md-4 col-lg-3">
                   <FontAwesomeIcon
@@ -206,7 +205,9 @@ const Databases = () => {
                         <OverlayTrigger
                           placement="top"
                           overlay={
-                            <Tooltip className="tooltip">Delete database</Tooltip>
+                            <Tooltip className="tooltip">
+                              Delete database
+                            </Tooltip>
                           }
                         >
                           <button className="btn btn-primary btn-sm rowItemButton bg-red">

@@ -1,4 +1,4 @@
-import { faBars, faTableList, faX } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "boxicons";
 import React, { useContext, useEffect, useState } from "react";
@@ -85,7 +85,11 @@ export default function Layouts() {
 
   const updateActive = () => {
     setRender(!render);
+    if (window.innerWidth <= 899) {
+      closeMobileMenu();
+    }
   };
+
   const logoutHandle = () => {
     Swal.fire({
       icon: "warning",
@@ -184,15 +188,15 @@ export default function Layouts() {
                   }`}
                   className="userImg"
                   alt=""
-                />{" "}
-              </span>{" "}
+                />
+              </span>
               <span className="ms-1">
                 {userData && (
                   <>
                     {userData.surname} {userData.name}
                   </>
                 )}
-              </span>{" "}
+              </span>
             </div>
 
             <ul
@@ -238,7 +242,10 @@ export default function Layouts() {
                       />
                     </a>
 
-                    <p onClick={closeMobileMenu} className="mobileButton">
+                    <p
+                      onClick={closeMobileMenu}
+                      className="mobileButton closeMobileButton"
+                    >
                       {" "}
                       <FontAwesomeIcon icon={faX} style={{ color: "white" }} />
                     </p>
@@ -264,6 +271,7 @@ export default function Layouts() {
                       }`}
                     >
                       <FiDatabase style={{ fontSize: "20px" }} />
+                      <span className="nav_name">Databases</span>
                     </Link>
 
                     <Link
@@ -275,6 +283,7 @@ export default function Layouts() {
                       }`}
                     >
                       <GiMove style={{ fontSize: "22px" }} />
+                      <span className="nav_name">Designer</span>
                     </Link>
 
                     <Link
@@ -284,6 +293,7 @@ export default function Layouts() {
                       className={`nav_link ${pathname === "/sql" && "active"}`}
                     >
                       <TbFileTypeSql style={{ fontSize: "22px" }} />
+                      <span className="nav_name">Sql</span>
                     </Link>
 
                     <Link
@@ -293,6 +303,7 @@ export default function Layouts() {
                       className={`nav_link ${pathname === "/info" && "active"}`}
                     >
                       <FaInfoCircle style={{ fontSize: "20px" }} />
+                      <span className="nav_name">Info</span>
                     </Link>
 
                     <Link
@@ -302,6 +313,7 @@ export default function Layouts() {
                       className={`nav_link `}
                     >
                       <MdLogout style={{ fontSize: "22px" }} />
+                      <span className="nav_name">Logout</span>
                     </Link>
                   </div>
                 </div>

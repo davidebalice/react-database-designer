@@ -11,6 +11,7 @@ import DeleteModal from "./DeleteModal";
 import LinksModal from "./LinksModal";
 import Modal from "./Modal";
 import DemoModal from "./DemoModal";
+import MobileMessage from "../../components/mobileMessage";
 
 const Designer = () => {
   let { id } = useParams();
@@ -201,6 +202,7 @@ const Designer = () => {
         handleDemoClose={handleDemoClose}
       />
       <DndProvider backend={HTML5Backend}>
+      <MobileMessage />
         <div className="page">
           <div ref={containerRef}>
             <div className="buttonContainer">

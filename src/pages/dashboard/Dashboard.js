@@ -5,6 +5,7 @@ import db from "../../assets/img/logo.png";
 import node from "../../assets/img/node.jpg";
 import react from "../../assets/img/react.jpg";
 import react_node from "../../assets/img/react_node.png";
+import MobileMessage from "../../components/mobileMessage";
 
 export default function Dashboard() {
   const token = localStorage.getItem("authToken");
@@ -17,13 +18,13 @@ export default function Dashboard() {
             className="col d-flex align-items-center"
             style={{ whiteSpace: "nowrap" }}
           >
-            <span className="text-xl" style={{ fontSize: "150%" }}>
-              {" "}
-            </span>
+            <span className="text-xl" style={{ fontSize: "150%" }}></span>
           </div>
         </div>
 
         <div className="accordion mb-3">
+          <MobileMessage />
+
           <h2 className="accordion-header">
             <button className="dashboardBar" type="button">
               <h3 className="">Dashboard</h3>

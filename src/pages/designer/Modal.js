@@ -246,7 +246,17 @@ const Modal = ({ show, handleClose, selectedTable }) => {
             <>
               {demo ? (
                 <>
-                  demo <span onClick={() => setDemo(false)}>close</span>
+                  <div className="modal-demo">
+                    <b>Demo mode</b>
+                    <br />
+                    <br />
+                    Demo mode is active, crud operations is not allowed (insert,
+                    update, delete.)
+                  </div>
+
+                  <div onClick={() => setDemo(false)} className="modal-close">
+                    close
+                  </div>
                 </>
               ) : (
                 <>

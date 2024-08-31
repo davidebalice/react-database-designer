@@ -19,7 +19,7 @@ export function UserProvider({ children }) {
   useEffect(() => {
     axios
       .post(
-        process.env.REACT_APP_API_BASE_URL + "/api/get/user",
+        process.env.REACT_APP_API_BASE_URL + "get/user",
         {},
         {
           headers: {
@@ -37,9 +37,6 @@ export function UserProvider({ children }) {
             ? false
             : true
         );
-        console.log("demo nel contesto");
-        console.log(demoMode);
-        console.log(response.data.user.demo);
       })
       .catch((error) => {
         console.error("Error calling api:", error);

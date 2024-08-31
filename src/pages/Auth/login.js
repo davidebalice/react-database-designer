@@ -15,7 +15,7 @@ const Login = () => {
 
   const loginHandle = () => {
     axios
-      .post(process.env.REACT_APP_API_BASE_URL + "/login", {
+      .post(process.env.REACT_APP_API_BASE_URL + "login", {
         email: formData.email,
         password: formData.password,
       })
@@ -28,8 +28,6 @@ const Login = () => {
           const token = response.data.token;
           localStorage.setItem("authToken", token);
 
-          console.log("response.data.user");
-          console.log(response.data.user);
           login(response.data.user);
 
           navigate("/");
