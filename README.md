@@ -13,12 +13,16 @@ This demo not use react-diagram, connection of fields, svg line, update position
 
 ## Link:
 
-https://react-database-designer.davidebalice.dev/
+https://database-designer.davidebalice.dev/
+
+## Frontend repository
+
+https://github.com/davidebalice/react-database-designer
 
 ## Backend repository
 
-...............
+https://github.com/davidebalice/node-database-designer-api
 
 <br>
 
-![Screenshot](https://react-tools.davidebalice.dev/assets/img/react-database-diagram.jpg)
+![Screenshot](https://www.aroundweb.it/screenshot/dabase-designer.jpg)
