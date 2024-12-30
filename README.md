@@ -25,4 +25,4 @@ https://github.com/davidebalice/node-database-designer-api
 
 <br>
 
-![Screenshot](https://www.aroundweb.it/screenshot/dabase-designer.jpg)
+![Screenshot](https://www.aroundweb.it/screenshot/database-designer.jpg)
