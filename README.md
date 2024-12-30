@@ -8,6 +8,7 @@
 
 
 This demo use react-dnd for manage drag adn drop events
+<br>
 This demo not use react-diagram, connection of fields, svg line, update position of line is self made.
 
 
